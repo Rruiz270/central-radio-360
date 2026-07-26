@@ -11,7 +11,13 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   }
 
   const session = await getSession();
-  if (!session) {
+  if (session) {
+    // Interno: o material precisa pertencer a uma campanha do tenant do usuário
+    const [ok] = await sql`
+      SELECT m.id FROM materials m JOIN campaigns c ON c.id = m.campaign_id
+      WHERE m.id = ${Number(id)} AND c.tenant_id = ${session.tenantId}`;
+    if (!ok) return NextResponse.json({ error: 'material de outra praça' }, { status: 403 });
+  } else {
     // Portal público: exige token válido da campanha dona do material
     if (!token) return NextResponse.json({ error: 'não autenticado' }, { status: 401 });
     const [ok] = await sql`

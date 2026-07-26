@@ -26,7 +26,10 @@ function LoginForm() {
       setBusy(false);
       return;
     }
-    router.push(params.get('next') || '/');
+    const raw = params.get('next') || '/';
+    // Só caminhos relativos same-origin (evita open redirect)
+    const next = raw.startsWith('/') && !raw.startsWith('//') && !raw.startsWith('/\\') ? raw : '/';
+    router.push(next);
     router.refresh();
   }
 

@@ -19,6 +19,7 @@ export default async function Dashboard() {
   const c360 = tenants.filter((t) => t.system === 'c360').length;
   const audSum = tenants.reduce((a, t) => a + Number(t.listeners), 0);
   const revSum = tenants.reduce((a, t) => a + Number(t.revenue_month), 0);
+  const myRev = Number(tenants.find((t) => t.id === session.tenantId)?.revenue_month || 0);
 
   return (
     <section className="view on">
@@ -26,7 +27,7 @@ export default async function Dashboard() {
         <Kpi label="Ações no mês" value="34" delta="▲ 8 vs. mês anterior" deltaTone="up" />
         <Kpi label="Cidades atendidas" value="19" delta="▲ 3 novas praças" deltaTone="up" tone="b2" />
         <Kpi label="Inserções no ar" value="1.284" delta="grade 92% ocupada" tone="y" />
-        <Kpi label="Receita do mês" value={fmtBRL(revSum)} delta="▲ 14%" deltaTone="up" tone="r" />
+        <Kpi label="Receita do mês (praça)" value={fmtBRL(myRev)} delta="▲ 14%" deltaTone="up" tone="r" />
       </div>
 
       <SecTitle>Prioridades de hoje</SecTitle>

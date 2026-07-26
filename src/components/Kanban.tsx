@@ -59,7 +59,11 @@ export function Kanban({ deals, stages, pipeline, wonStage }: {
                 className="kcard"
                 draggable
                 style={s === wonStage ? { borderLeftColor: '#25c257' } : undefined}
-                onDragStart={() => { dragId.current = d.id; }}
+                onDragStart={(e) => {
+                  dragId.current = d.id;
+                  e.dataTransfer.setData('text/plain', String(d.id));
+                  e.dataTransfer.effectAllowed = 'move';
+                }}
                 data-deal={d.advertiser}
               >
                 <b>{d.advertiser}</b>

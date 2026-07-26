@@ -44,7 +44,11 @@ export function BreakAllocator({ spots: initial, breaks }: { spots: Spot[]; brea
       key={s.id}
       className="spotchip"
       draggable
-      onDragStart={() => { dragId.current = s.id; }}
+      onDragStart={(e) => {
+        dragId.current = s.id;
+        e.dataTransfer.setData('text/plain', String(s.id));
+        e.dataTransfer.effectAllowed = 'move';
+      }}
       data-spot={s.advertiser}
     >
       {s.advertiser} <span className="s">{s.duration_sec}&quot;</span>
