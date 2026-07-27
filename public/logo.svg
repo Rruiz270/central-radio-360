@@ -1,5 +1,17 @@
 <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Metropolitana">
-  <rect width="100" height="100" rx="22" fill="#ffffff"/>
-  <path d="M18 78 V30 L38 58 L50 38 L62 58 L82 30 V78 H70 V56 L62 70 L50 50 L38 70 L30 56 V78 Z" fill="#0020b8"/>
-  <circle cx="50" cy="22" r="7" fill="#ffe200"/>
+  <!-- Marca Metropolitana (manual mai/2026): elipse azul 293C inclinada, anel branco,
+       M branco, arco amarelo Yellow C, sorriso vermelho 485C. Versão colorida sobre fundo branco. -->
+  <g transform="rotate(-12 50 50)">
+    <ellipse cx="50" cy="50" rx="43" ry="47" fill="#0020b8"/>
+    <ellipse cx="50" cy="50" rx="36.5" ry="40.5" fill="none" stroke="#ffffff" stroke-width="4.6"/>
+    <ellipse cx="50" cy="50" rx="43" ry="47" fill="none" stroke="#0020b8" stroke-width="0"/>
+    <!-- brilho do anel (pincelada) -->
+    <path d="M84.5,38 A41 45 0 0 1 86.5,58" fill="none" stroke="#ffffff" stroke-width="3.4" stroke-linecap="round" opacity=".95"/>
+    <!-- arco amarelo -->
+    <path d="M31,25.5 Q50,13.5 69,23.5" fill="none" stroke="#ffe200" stroke-width="5.2" stroke-linecap="round"/>
+    <!-- M -->
+    <path d="M27.5,71 L32.5,34 Q33,30.5 36.5,30.5 L44,30.5 L50,49 L56,30.5 L63.5,30.5 Q67,30.5 67.5,34 L72.5,71 L61.5,71 L58.8,50 L53.5,66.5 L46.5,66.5 L41.2,50 L38.5,71 Z" fill="#ffffff" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round"/>
+    <!-- sorriso vermelho -->
+    <path d="M33,77.5 Q50,86.5 67,75.5" fill="none" stroke="#e50012" stroke-width="5" stroke-linecap="round"/>
+  </g>
 </svg>
