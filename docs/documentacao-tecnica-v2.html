@@ -70,7 +70,7 @@
   <h1>Central 360 — Documentação v2.0</h1>
   <p>O sistema saiu do papel: a v1.0 está <b>no ar em produção</b>. Esta versão da documentação registra o que foi construído e testado, e detalha — em ordem de prioridade — o que falta para a plataforma operar de verdade na rotina da Metropolitana e da rede.</p>
   <div class="meta">
-    <span>Versão <b>2.0</b></span><span>Data <b>26/07/2026</b></span>
+    <span>Versão <b>2.1</b></span><span>Data <b>27/07/2026 (madrugada)</b></span>
     <span>Produção <b><a href="https://central-radio-360.vercel.app">central-radio-360.vercel.app</a></b></span>
     <span>Repo <b>Rruiz270/central-radio-360</b> (privado)</span>
     <span>Base <b>doc v1.0 + mockup v0.5 + Manual de Marca mai/2026</b></span>
@@ -104,7 +104,20 @@
   <div class="kpi y"><div class="big">6</div><div class="l">integrações aguardando credenciais</div></div>
   <div class="kpi r"><div class="big">0</div><div class="l">dados reais da operação (tudo é demo/seed)</div></div>
 </div>
-<div class="hint g"><b>Leitura rápida:</b> o software está pronto para uso interno imediato (gestão, funil, tráfego, alertas em modo simulado). Para "operar de verdade" faltam sobretudo <b>credenciais de terceiros</b> (WhatsApp, IA, redes, NFS-e), <b>dados reais</b> (anunciantes, grade, acervo, usuários) e três peças de infra (storage de mídia, tempo real, crons). O conector Pulsar continua sendo a fase final e de maior risco — inalterado desde a v1.0.</div>
+<div class="hint g"><b>Leitura rápida:</b> o software está pronto para uso interno imediato (gestão, funil, tráfego, alertas em modo simulado). O que falta agora é quase todo <b>providência de negócio</b>: credenciais de terceiros (WhatsApp, IA, redes, NFS-e) e carga de <b>dados reais</b>. A engenharia das trilhas 2 e 3 foi concluída na madrugada de 27/07 (abaixo).</div>
+
+<div class="card" style="border-left:5px solid #25c257"><h3>Atualização v2.1 — executado na madrugada de 27/07 <span class="chip ok">no ar e testado</span></h3>
+<ul>
+  <li><b>Gestão de usuários</b> (criar/desativar/reset de senha, por praça) + <b>2FA TOTP</b> por app autenticador — em Configurações → Usuários</li>
+  <li><b>Importadores CSV</b> das 7 entidades (anunciantes, propostas, pedidos, músicas, campanhas, equipamentos, equipe) + <b>backup completo JSON</b> com 1 clique</li>
+  <li><b>Crons reais</b> (Vercel Cron + execução oportunista autenticada): <b>Radar com scraping real do Google News</b> (manchetes do dia entrando sozinhas na pauta), publicador de posts agendados, régua de cobrança de faturas, estoque mínimo — painel de execuções em Configurações → Sistema</li>
+  <li><b>Upload real de arquivos</b> no Portal do Cliente (áudio/imagem/vídeo/PDF até 8 MB, servidos com allowlist de MIME + sandbox) — botão Ouvir/Ver/Assistir no material</li>
+  <li><b>Fila de alertas ao vivo</b> (atualiza sozinha a cada 20s)</li>
+  <li><b>NOVO módulo Concorrência</b>: comparativo por praça com <b>APIs públicas de verdade</b> — população IBGE/SIDRA (11,9M em SP), penetração de audiência, popularidade digital via Radio-Browser, share of voice social editável, leitura estratégica automática</li>
+  <li><b>API de ingestão Pulsar no ar</b> (<code>POST /api/v1/ingest</code>): chave por praça revogável, lotes idempotentes, conector de exemplo no repo — a F2 do §8 está pronta antes da F1 (diagnóstico na rádio)</li>
+  <li>Hardening: crons exigem sessão ou <code>CRON_SECRET</code>; arquivos com nosniff + CSP sandbox</li>
+</ul>
+<p class="lead" style="margin-top:8px"><b>Restante para operação plena = trilha 1 (credenciais de negócio) + carga de dados reais + diagnóstico Pulsar na máquina da rádio.</b> Nada disso é código.</p></div>
 
 <!-- ============================================ -->
 <h2 id="s2"><span class="n">2</span>O que está no ar (construído e testado)</h2>
