@@ -9,6 +9,7 @@ const TITLES: Record<string, [string, string]> = {
   '/': ['Comando', 'Visão Geral'],
   '/rede': ['Comando', 'Rede & Afiliadas'],
   '/concorrencia': ['Comando', 'Concorrência'],
+  '/audiencia': ['Comando', 'Audiência — Fontes'],
   '/organograma': ['Comando', 'Organograma & Acessos'],
   '/programacao': ['Rádio', 'Programação & Musical'],
   '/jornalismo': ['Rádio', 'Jornalismo & Radar'],

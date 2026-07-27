@@ -74,10 +74,22 @@ export default async function Dashboard() {
         Audiência — pesquisas plugadas por API
       </SecTitle>
       <div className="cards g3" style={{ marginBottom: 16 }}>
-        <Card title="Fontes de audiência" right={<span className="wa"><span className="wd" />via API</span>}>
-          <div className="plat"><div className="pi" style={{ background: 'var(--mblue)' }}>KI</div><div style={{ flex: 1 }}><b>Kantar IBOPE Media</b><div className="tiny muted">AM/FM · 13 mercados · Client Center</div></div><span className="lock">conectado</span></div>
-          <div className="plat"><div className="pi" style={{ background: '#0e807c' }}>TD</div><div style={{ flex: 1 }}><b>Triton Digital</b><div className="tiny muted">streaming / webcast metrics</div></div><span className="lock">conectado</span></div>
-          <div className="plat"><div className="pi" style={{ background: '#a9741a' }}>NX</div><div style={{ flex: 1 }}><b>Nextdial</b><div className="tiny muted">aferição de áudio digital</div></div><span className="lock">conectado</span></div>
+        <Card title="Fontes de audiência" right={<span className="wa"><span className="wd" />clique p/ abrir</span>}>
+          <Link href="/audiencia?f=kantar" className="plat" style={{ cursor: 'pointer' }} data-fonte="kantar">
+            <div className="pi" style={{ background: 'var(--mblue)' }}>KI</div>
+            <div style={{ flex: 1 }}><b>Kantar IBOPE Media</b><div className="tiny muted">share Metro vs. concorrentes · por público</div></div>
+            <span className="lock">abrir →</span>
+          </Link>
+          <Link href="/audiencia?f=triton" className="plat" style={{ cursor: 'pointer' }} data-fonte="triton">
+            <div className="pi" style={{ background: '#0e807c' }}>TD</div>
+            <div style={{ flex: 1 }}><b>Triton Digital</b><div className="tiny muted">streaming ao vivo · curva do dia · TSL</div></div>
+            <span className="lock">abrir →</span>
+          </Link>
+          <Link href="/audiencia?f=nextdial" className="plat" style={{ cursor: 'pointer' }} data-fonte="nextdial">
+            <div className="pi" style={{ background: '#a9741a' }}>NX</div>
+            <div style={{ flex: 1 }}><b>Nextdial</b><div className="tiny muted">dispositivos · cidades do streaming</div></div>
+            <span className="lock">abrir →</span>
+          </Link>
         </Card>
         <Card title="Métricas da praça (98.5 · SP)" tag="último período">
           <Mini items={[{ v: '1º', l: 'no segmento jovem' }, { v: '1.2M', l: 'alcance/dia' }, { v: '42min', l: 'tempo médio' }]} />

@@ -2,7 +2,7 @@ import type { Role } from './auth';
 
 /* Mapa de acesso por perfil — espelho do mockup aprovado (ACCESS) */
 export type ModuleKey =
-  | 'dash' | 'rede' | 'org' | 'concorrencia'
+  | 'dash' | 'rede' | 'org' | 'concorrencia' | 'audiencia'
   | 'prog' | 'jornalismo' | 'comercial' | 'cliente' | 'digital' | 'tecnica'
   | 'vendasag' | 'acoes' | 'planejamento' | 'estoque' | 'equipe'
   | 'marketing' | 'monetizacao'
@@ -11,12 +11,12 @@ export type ModuleKey =
 
 export const ACCESS: Record<Role, ModuleKey[] | 'all'> = {
   admin: 'all',
-  comercial: ['dash', 'rede', 'concorrencia', 'comercial', 'cliente', 'vendasag', 'financeiro', 'alertas', 'ia'],
-  programacao: ['dash', 'prog', 'ia', 'alertas'],
-  jornalismo: ['dash', 'jornalismo', 'ia', 'alertas'],
-  marketing: ['dash', 'concorrencia', 'marketing', 'monetizacao', 'digital', 'cliente', 'alertas'],
-  operacoes: ['dash', 'vendasag', 'acoes', 'planejamento', 'estoque', 'equipe', 'alertas'],
-  afiliada: ['dash', 'prog', 'jornalismo', 'comercial', 'alertas'],
+  comercial: ['dash', 'rede', 'concorrencia', 'audiencia', 'comercial', 'cliente', 'vendasag', 'financeiro', 'alertas', 'ia'],
+  programacao: ['dash', 'audiencia', 'prog', 'ia', 'alertas'],
+  jornalismo: ['dash', 'audiencia', 'jornalismo', 'ia', 'alertas'],
+  marketing: ['dash', 'concorrencia', 'audiencia', 'marketing', 'monetizacao', 'digital', 'cliente', 'alertas'],
+  operacoes: ['dash', 'audiencia', 'vendasag', 'acoes', 'planejamento', 'estoque', 'equipe', 'alertas'],
+  afiliada: ['dash', 'audiencia', 'prog', 'jornalismo', 'comercial', 'alertas'],
   cliente: [],
 };
 
@@ -32,6 +32,7 @@ export const NAV: { grp: string; cls: string; items: { key: ModuleKey; href: str
       { key: 'dash', href: '/', label: 'Visão Geral (BI)' },
       { key: 'rede', href: '/rede', label: 'Rede & Afiliadas', pill: '6' },
       { key: 'concorrencia', href: '/concorrencia', label: 'Concorrência', pill: 'novo' },
+      { key: 'audiencia', href: '/audiencia', label: 'Audiência (fontes)', pill: 'novo' },
       { key: 'org', href: '/organograma', label: 'Organograma & Acessos' },
     ],
   },
