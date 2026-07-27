@@ -15,6 +15,8 @@ export function MaterialCard({ id, kind, title, status: initialStatus, note, tok
   const toast = useToast();
   const [status, setStatus] = useState(initialStatus);
   const [cls, label] = PREV[kind] || PREV.imagem;
+  const fileUrl = fileUuid ? `/api/files/${fileUuid}` : null;
+  const cleanTitle = title.replace(/\.(m4a|mp3|wav|mp4|webm|png|jpe?g|gif|pdf)$/i, '');
 
   async function setTo(next: string, msg: string) {
     const res = await fetch(`/api/materials/${id}`, {
@@ -48,9 +50,23 @@ export function MaterialCard({ id, kind, title, status: initialStatus, note, tok
 
   return (
     <div className="matcard" data-material={title}>
-      <div className={`prev ${cls}`}>{label}</div>
+      {fileUrl && kind === 'imagem' ? (
+        <a href={fileUrl} target="_blank" rel="noreferrer" style={{ display: 'block' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={fileUrl} alt={cleanTitle} style={{ width: '100%', height: 170, objectFit: 'cover', display: 'block' }} />
+        </a>
+      ) : fileUrl && kind === 'video' ? (
+        <video src={fileUrl} controls preload="metadata" style={{ width: '100%', height: 170, objectFit: 'cover', display: 'block', background: '#04061a' }} />
+      ) : fileUrl && kind === 'audio' ? (
+        <div className={`prev ${cls}`} style={{ height: 170, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+          <span>{label}</span>
+          <audio src={fileUrl} controls preload="metadata" style={{ width: '90%' }} />
+        </div>
+      ) : (
+        <div className={`prev ${cls}`}>{label}</div>
+      )}
       <div className="mc">
-        <b>{title}</b>
+        <b>{cleanTitle}</b>
         <div className="tiny muted" style={{ margin: '4px 0 10px' }}>
           {status === 'aprovado' ? <span className="chip c-green">aprovado pelo cliente</span>
             : status === 'ajuste' ? <span className="chip c-amber">ajuste solicitado</span>
