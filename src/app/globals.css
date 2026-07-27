@@ -357,3 +357,5 @@
   .app{grid-template-columns:1fr}
   .side{position:relative;height:auto}
 }
+.mapwrap-svg{max-width:520px;margin:0 auto}
+.mapdot{cursor:pointer}

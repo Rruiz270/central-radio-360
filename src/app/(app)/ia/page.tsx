@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { requireModule } from '@/lib/guard';
 import { Kpi, SecTitle, Card, Hint, ListLi, AiTag, BarRow } from '@/components/ui';
+import { PricingApply } from '@/components/actions';
 
 export default async function IaPage() {
   await requireModule('ia');
@@ -51,8 +52,8 @@ export default async function IaPage() {
       <div className="cards g3">
         <Card title="Pricing Copilot" right={<AiTag />}>
           <div className="tiny muted">Sugere preço por daypart conforme demanda, ocupação e sazonalidade — vendedor fecha melhor.</div>
-          <ListLi icoTone="green" ico="A" title="Almoço: subir p/ R$ 520" sub="ocupação 92%" right={<button className="btn sm p">Aplicar</button>} />
-          <ListLi icoTone="amber" ico="M" title="Madrugada: montar pacote" sub="ocupação 28%" right={<button className="btn sm">Ver</button>} />
+          <ListLi icoTone="green" ico="A" title="Almoço: subir p/ R$ 520" sub="ocupação 92%" right={<PricingApply daypart="Almoço" price={520} label="Almoço" />} />
+          <ListLi icoTone="amber" ico="M" title="Madrugada: montar pacote" sub="ocupação 28%" right={<Link href="/comercial" className="btn sm">Ver</Link>} />
         </Card>
         <Card title="Delinquency Radar" right={<AiTag />}>
           <div className="tiny muted">Prevê quem vai atrasar (motor do Better Inadimplência) e dispara cobrança automática.</div>

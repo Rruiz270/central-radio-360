@@ -3,6 +3,7 @@ import { requireModule } from '@/lib/guard';
 import { Kpi, Card, Chip, Hint, ListLi, AiTag } from '@/components/ui';
 import { Tabs } from '@/components/Tabs';
 import { RadarSend } from '@/components/RadarSend';
+import { QuickAdd } from '@/components/QuickAdd';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,7 +29,17 @@ export default async function JornalismoPage() {
                   <Kpi label="Pautas em produção" value={String(pautas.filter((p) => p.status === 'producao').length)} delta="3 urgentes" tone="b2" />
                   <Kpi label="Boletins/hora" value="2" delta="grade jornalística" tone="y" />
                 </div>
-                <Card title="Espelho de pauta" right={<button className="btn sm p">+ Pauta</button>} pad0>
+                <Card
+                  title="Espelho de pauta"
+                  right={<QuickAdd label="+ Pauta" title="Nova pauta" endpoint="/api/pautas" small
+                    fields={[
+                      { key: 'title', label: 'Pauta', full: true },
+                      { key: 'editoria', label: 'Editoria', type: 'select', options: ['Educação', 'Cidades', 'Política', 'Esportes', 'Cultura', 'Geral'] },
+                      { key: 'reporter', label: 'Repórter' },
+                      { key: 'time_slot', label: 'Horário previsto' },
+                    ]}
+                    successMsg="Pauta no espelho — status apurando." />}
+                  pad0>
                   <table>
                     <thead><tr><th>Pauta</th><th>Editoria</th><th>Repórter</th><th>Status</th><th>Horário</th></tr></thead>
                     <tbody>

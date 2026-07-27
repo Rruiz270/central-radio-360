@@ -1,6 +1,7 @@
 import { sql } from '@/lib/db';
 import { requireModule } from '@/lib/guard';
 import { Card, Chip } from '@/components/ui';
+import { BriefingForm } from '@/components/actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,17 +13,7 @@ export default async function PlanejamentoPage() {
   return (
     <section className="view on">
       <div className="cards g2">
-        <Card title="Conceito da ação" tag="criação">
-          <div className="form">
-            <div className="field full"><label>Nome da ação</label><input defaultValue="Verão RioMar — Rádio na Praia" /></div>
-            <div className="field"><label>Objetivo</label>
-              <select><option>Sampling + brand</option><option>Geração de leads</option><option>Test drive</option></select>
-            </div>
-            <div className="field"><label>Público</label><input defaultValue="Famílias, 25–45" /></div>
-            <div className="field full"><label>Mecânica / roteiro</label><input defaultValue="Locutor ao vivo + sorteio a cada hora + brindes" /></div>
-          </div>
-          <button className="btn p" style={{ marginTop: 14 }}>Gerar briefing p/ execução →</button>
-        </Card>
+        <Card title="Conceito da ação" tag="criação"><BriefingForm /></Card>
         <Card title="Calendário de ativações" tag="próximas praças" pad0>
           <table>
             <thead><tr><th>Praça</th><th>Data</th><th>FM?</th><th>Status</th></tr></thead>

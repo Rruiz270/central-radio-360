@@ -1,5 +1,6 @@
 import { Kpi, SecTitle, Card, Chip, BarRow, Mini, Hint, fmtBRL } from '@/components/ui';
 import { MaterialCard } from '@/components/MaterialCard';
+import { UploadMaterial } from '@/components/actions';
 
 /* Visão da campanha — compartilhada entre o módulo interno e o portal público (token) */
 export function CampaignView({ campaign, materials, proofs, token }: {
@@ -25,7 +26,7 @@ export function CampaignView({ campaign, materials, proofs, token }: {
           return <MaterialCard key={mm.id} id={mm.id} kind={mm.kind} title={mm.title} status={mm.status} note={mm.note} token={token} />;
         })}
       </div>
-      <div className="drop">Arraste aqui ou clique para <b>subir um material</b> (áudio, imagem ou vídeo)</div>
+      <UploadMaterial campaignId={(campaign as { id: number }).id} token={token} />
 
       <SecTitle right={<span className="tiny muted">horários que o spot entrou no ar</span>}>Comprovação de veiculação (prova)</SecTitle>
       <Card pad0>

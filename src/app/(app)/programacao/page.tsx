@@ -6,6 +6,7 @@ import { Player } from '@/components/Player';
 import { GradeHeatmap } from '@/components/GradeHeatmap';
 import { SongForm } from '@/components/SongForm';
 import { MetasIA } from '@/components/MetasIA';
+import { QuickAdd } from '@/components/QuickAdd';
 
 export const dynamic = 'force-dynamic';
 
@@ -72,7 +73,18 @@ export default async function ProgPage() {
           {
             id: 'cat', label: 'Categorias',
             content: (
-              <Card title="Categorias da programação" right={<button className="btn sm p">+ Categoria</button>} pad0>
+              <Card
+                title="Categorias da programação"
+                right={<QuickAdd label="+ Categoria" title="Nova categoria" endpoint="/api/categories" small
+                  fields={[
+                    { key: 'name', label: 'Nome' },
+                    { key: 'code', label: 'Código' },
+                    { key: 'weight', label: 'Peso', type: 'select', options: ['Alto', 'Médio', 'Baixo'] },
+                    { key: 'interval_h', label: 'Intervalo (h)', value: '3' },
+                    { key: 'rotation', label: 'Rotação/h', value: '1-2' },
+                  ]}
+                  successMsg="Categoria criada e ativa na programação." />}
+                pad0>
                 <table>
                   <thead><tr><th>Cód</th><th>Categoria</th><th>Peso</th><th>Intervalo</th><th>Rotação/h</th><th /></tr></thead>
                   <tbody>

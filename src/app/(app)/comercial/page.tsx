@@ -5,6 +5,8 @@ import { Tabs } from '@/components/Tabs';
 import { Kanban } from '@/components/Kanban';
 import { BreakAllocator } from '@/components/BreakAllocator';
 import { OrderForm } from '@/components/OrderForm';
+import { QuickAdd } from '@/components/QuickAdd';
+import { BxfExport } from '@/components/actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +14,7 @@ export default async function ComercialPage() {
   const session = await requireModule('comercial');
   const t = session.tenantId;
   const [deals, spots, breaks, prods, rates, orders] = await Promise.all([
-    sql`SELECT id, advertiser, descr, value::text, stage, seller FROM deals WHERE tenant_id = ${t} AND pipeline = 'radio' ORDER BY id`,
+    sql`SELECT id, advertiser, descr, value::text, stage, seller, created_at::text FROM deals WHERE tenant_id = ${t} AND pipeline = 'radio' ORDER BY id`,
     sql`SELECT id, advertiser, duration_sec, break_id FROM spots WHERE tenant_id = ${t} ORDER BY position, id`,
     sql`SELECT id, hour, limit_sec FROM breaks WHERE tenant_id = ${t} ORDER BY hour`,
     sql`SELECT * FROM spot_productions WHERE tenant_id = ${t} ORDER BY id`,
@@ -95,7 +97,7 @@ export default async function ComercialPage() {
                 </Hint>
                 <Card
                   title="Alocação de spots nos breaks"
-                  right={<><span className="chip c-amber" style={{ marginLeft: 'auto' }}>ANATEL · limite 3:00/break</span><button className="btn sm" style={{ marginLeft: 8 }}>Export automação (BXF)</button></>}
+                  right={<><span className="chip c-amber" style={{ marginLeft: 'auto' }}>ANATEL · limite 3:00/break</span><BxfExport breaks={breaks as never} spots={spots as never} /></>}
                 >
                   <BreakAllocator spots={spots as never} breaks={breaks as never} />
                   <Hint style={{ marginTop: 6 }}>
@@ -152,7 +154,17 @@ export default async function ComercialPage() {
                   <Kpi label="Comprometido no ano" value="R$ 1,9M" delta="68% realizado" deltaTone="up" tone="b2" />
                   <Kpi label="Em risco" value="1" delta="abaixo do pace" deltaTone="down" tone="r" />
                 </div>
-                <Card title="Metas por anunciante" right={<button className="btn sm p">Novo deal</button>} pad0>
+                <Card
+                  title="Metas por anunciante"
+                  right={<QuickAdd label="Novo deal" title="Novo deal (meta anual)" endpoint="/api/deals" small
+                    fields={[
+                      { key: 'advertiser', label: 'Anunciante' },
+                      { key: 'annual_target', label: 'Meta anual (R$)', type: 'number' },
+                      { key: 'descr', label: 'Escopo' },
+                      { key: 'seller', label: 'Vendedor' },
+                    ]}
+                    successMsg="Deal criado — pace monitorado contra a meta anual." />}
+                  pad0>
                   <table>
                     <thead><tr><th>Anunciante</th><th>Meta anual</th><th>Realizado</th><th>Pace</th><th>Status</th></tr></thead>
                     <tbody>
@@ -201,7 +213,17 @@ export default async function ComercialPage() {
                     </tbody>
                   </table>
                 </Card>
-                <Card title="Spots em produção" right={<button className="btn sm p">+ Pedido de spot</button>} pad0>
+                <Card
+                  title="Spots em produção"
+                  right={<QuickAdd label="+ Pedido de spot" title="Pedido de produção de spot" endpoint="/api/spot-productions" small
+                    fields={[
+                      { key: 'client', label: 'Cliente / campanha' },
+                      { key: 'duration', label: 'Duração', type: 'select', options: ['30"', '15"', '45"', '60"'] },
+                      { key: 'owner', label: 'Responsável', type: 'select', options: ['Redação criativa', 'Estúdio 1', 'Estúdio 2', 'Tráfego'] },
+                      { key: 'due', label: 'Prazo' },
+                    ]}
+                    successMsg="Pedido criado — workflow começa no Roteiro." />}
+                  pad0>
                   <table>
                     <thead><tr><th>Cliente</th><th>Duração</th><th>Etapa</th><th>Responsável</th><th>Prazo</th></tr></thead>
                     <tbody>
@@ -228,7 +250,17 @@ export default async function ComercialPage() {
                   <Kpi label="Ticket médio / ação" value="R$ 22k" delta="estável" tone="y" />
                   <Kpi label="Anunciantes ativos" value="63" delta="▲ 4" deltaTone="up" tone="r" />
                 </div>
-                <Card title="Pipeline de propostas" right={<button className="btn sm p">+ Nova proposta</button>} pad0>
+                <Card
+                  title="Pipeline de propostas"
+                  right={<QuickAdd label="+ Nova proposta" title="Nova proposta comercial" endpoint="/api/deals" small
+                    fields={[
+                      { key: 'advertiser', label: 'Anunciante' },
+                      { key: 'descr', label: 'Formato (spots, patrocínio…)' },
+                      { key: 'value', label: 'Valor (R$)', type: 'number' },
+                      { key: 'seller', label: 'Vendedor' },
+                    ]}
+                    successMsg="Proposta criada — entrou no funil como Lead." />}
+                  pad0>
                   <table>
                     <thead><tr><th>Cliente</th><th>Formato</th><th>Valor</th><th>Vendedor</th><th>Etapa</th></tr></thead>
                     <tbody>

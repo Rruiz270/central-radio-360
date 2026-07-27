@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 export default async function VendasAgenciaPage() {
   const session = await requireModule('vendasag');
   const deals = await sql`
-    SELECT id, advertiser, descr, value::text, stage FROM deals
+    SELECT id, advertiser, descr, value::text, stage, seller, created_at::text FROM deals
     WHERE tenant_id = ${session.tenantId} AND pipeline = 'agencia' ORDER BY id`;
   const pipeline = deals.filter((d) => d.stage !== 'Ganho').reduce((a, d) => a + parseFloat(d.value), 0);
   const ganho = deals.filter((d) => d.stage === 'Ganho').reduce((a, d) => a + parseFloat(d.value), 0);

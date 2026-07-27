@@ -1,6 +1,7 @@
 import { sql } from '@/lib/db';
 import { requireModule } from '@/lib/guard';
 import { Kpi, SecTitle, Card, Chip, Hint, BarRow, AiTag, WoTag, fmtBRL } from '@/components/ui';
+import { InvoiceEmitButtons } from '@/components/actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,7 +57,7 @@ export default async function FinanceiroPage() {
       <div className="cards g2" style={{ marginBottom: 16 }}>
         <Card
           title="Geração de faturas"
-          right={<div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}><button className="btn sm">Em lote (batch)</button><button className="btn sm p">On-demand</button></div>}
+          right={<InvoiceEmitButtons />}
           pad0
         >
           <table>

@@ -41,11 +41,27 @@ export function Topbar({ userName, roleLabel }: { userName: string; roleLabel: s
 
   const [crumb, title] = TITLES[pathname] || ['Central 360', 'Central 360'];
   const initials = userName.split(' ').map((p) => p[0]).slice(0, 2).join('').toUpperCase();
+  const [q, setQ] = useState('');
 
   async function logout() {
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/login');
     router.refresh();
+  }
+
+  function search(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key !== 'Enter' || !q.trim()) return;
+    const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const needle = norm(q);
+    const hit = Object.entries(TITLES).find(([, [, t]]) => norm(t).includes(needle))
+      || Object.entries(TITLES).find(([p]) => norm(p).includes(needle));
+    if (hit) {
+      router.push(hit[0]);
+      setQ('');
+    } else {
+      router.push('/comercial');
+      setQ('');
+    }
   }
 
   return (
@@ -54,13 +70,23 @@ export function Topbar({ userName, roleLabel }: { userName: string; roleLabel: s
         <div className="crumb">{crumb}</div>
         <h1 className="disp">{title}</h1>
       </div>
-      <div className="search"><input placeholder="Buscar ação, cidade, música, cliente…" /></div>
+      <div className="search">
+        <input
+          placeholder="Buscar módulo… (Enter)"
+          value={q}
+          onChange={(e) => setQ(e.target.value)}
+          onKeyDown={search}
+          data-testid="search"
+        />
+      </div>
       <div className="rolesel">Perfil: <b style={{ color: '#8fa8ff', fontFamily: 'var(--disp)', fontSize: 12 }}>{roleLabel}</b></div>
       <div className="clock">
         <b suppressHydrationWarning>{now ? now.toLocaleTimeString('pt-BR') : '--:--:--'}</b>
         <span suppressHydrationWarning>{now ? now.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' }) : ''}</span>
       </div>
-      <div className="bell" title="Notificações"><Ic name="bell" /></div>
+      <div className="bell" title="Alertas recentes" style={{ cursor: 'pointer' }} onClick={() => router.push('/alertas')} data-testid="bell">
+        <Ic name="bell" />
+      </div>
       <div className="me" title={userName}>{initials}</div>
       <button className="btn sm" onClick={logout} title="Sair" aria-label="Sair" data-testid="logout">
         <Ic name="logout" size={14} /> Sair
