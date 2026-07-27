@@ -4,6 +4,7 @@ import { ACCESS, NAV, ROLE_LABEL } from '@/lib/rbac';
 import { NavLink } from '@/components/NavLink';
 import { Topbar } from '@/components/Topbar';
 import { ToastProvider } from '@/components/Toast';
+import { Opportunistic } from '@/components/Opportunistic';
 
 export const dynamic = 'force-dynamic';
 
@@ -19,6 +20,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <ToastProvider>
+      <Opportunistic />
       <div className="app">
         <aside className="side">
           <div className="brand">

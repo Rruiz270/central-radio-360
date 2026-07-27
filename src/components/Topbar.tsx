@@ -8,6 +8,7 @@ import { ThemeToggle } from './ThemeToggle';
 const TITLES: Record<string, [string, string]> = {
   '/': ['Comando', 'Visão Geral'],
   '/rede': ['Comando', 'Rede & Afiliadas'],
+  '/concorrencia': ['Comando', 'Concorrência'],
   '/organograma': ['Comando', 'Organograma & Acessos'],
   '/programacao': ['Rádio', 'Programação & Musical'],
   '/jornalismo': ['Rádio', 'Jornalismo & Radar'],

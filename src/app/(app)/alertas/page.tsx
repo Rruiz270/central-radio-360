@@ -2,6 +2,7 @@ import { sql } from '@/lib/db';
 import { requireModule } from '@/lib/guard';
 import { Kpi, SecTitle, Card, Hint, ListLi, WaBadge } from '@/components/ui';
 import { AlertRulesTable, NewRuleForm } from '@/components/AlertRules';
+import { LiveFeed } from '@/components/LiveFeed';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,16 +30,7 @@ export default async function AlertasPage() {
       <div className="cards g2" style={{ marginBottom: 8 }}>
         <Card title="Novo gatilho automático" right={<WaBadge>WhatsApp</WaBadge>}><NewRuleForm /></Card>
         <Card title="Fila de alertas — ao vivo" right={<span className="badge-live"><span className="dot" />AO VIVO</span>}>
-          {log.map((l) => (
-            <ListLi
-              key={l.id}
-              icoTone={l.status === 'entregue' ? 'green' : 'amber'}
-              ico={l.title.slice(0, 1).toUpperCase()}
-              title={l.title}
-              sub={`${l.wa_group} · ${new Date(l.sent_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`}
-              right={<WaBadge>{l.status}</WaBadge>}
-            />
-          ))}
+          <LiveFeed initial={log.map((l) => ({ id: l.id, title: l.title, wa_group: l.wa_group, status: l.status, sent_at: String(l.sent_at) }))} />
         </Card>
       </div>
 

@@ -22,8 +22,8 @@ export function CampaignView({ campaign, materials, proofs, token }: {
       <SecTitle right={<span className="tiny muted">o cliente aprova, reprova ou sobe o material</span>}>Aprovação de materiais</SecTitle>
       <div className="cards g3" style={{ marginBottom: 12 }}>
         {materials.map((m) => {
-          const mm = m as { id: number; kind: string; title: string; status: string; note: string | null };
-          return <MaterialCard key={mm.id} id={mm.id} kind={mm.kind} title={mm.title} status={mm.status} note={mm.note} token={token} />;
+          const mm = m as { id: number; kind: string; title: string; status: string; note: string | null; file_uuid?: string | null };
+          return <MaterialCard key={mm.id} id={mm.id} kind={mm.kind} title={mm.title} status={mm.status} note={mm.note} token={token} fileUuid={mm.file_uuid} />;
         })}
       </div>
       <UploadMaterial campaignId={(campaign as { id: number }).id} token={token} />

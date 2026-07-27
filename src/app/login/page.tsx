@@ -8,6 +8,8 @@ function LoginForm() {
   const params = useSearchParams();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [totp, setTotp] = useState('');
+  const [need2fa, setNeed2fa] = useState(false);
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -18,9 +20,15 @@ function LoginForm() {
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, totp: totp || undefined }),
     });
     const data = await res.json();
+    if (data.need2fa && !data.ok) {
+      setNeed2fa(true);
+      setErr(res.ok ? '' : data.error || '');
+      setBusy(false);
+      return;
+    }
     if (!res.ok) {
       setErr(data.error || 'Falha no login.');
       setBusy(false);
@@ -67,6 +75,19 @@ function LoginForm() {
             required
           />
         </div>
+        {need2fa && (
+          <div className="field">
+            <label>Código 2FA (app autenticador)</label>
+            <input
+              inputMode="numeric"
+              maxLength={6}
+              value={totp}
+              onChange={(e) => setTotp(e.target.value)}
+              placeholder="000000"
+              autoFocus
+            />
+          </div>
+        )}
         {err && <div className="login-err">{err}</div>}
         <button className="btn p w100" style={{ marginTop: 18 }} disabled={busy}>
           {busy ? <span className="spinner" /> : 'Entrar'}

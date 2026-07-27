@@ -2,7 +2,7 @@ import type { Role } from './auth';
 
 /* Mapa de acesso por perfil — espelho do mockup aprovado (ACCESS) */
 export type ModuleKey =
-  | 'dash' | 'rede' | 'org'
+  | 'dash' | 'rede' | 'org' | 'concorrencia'
   | 'prog' | 'jornalismo' | 'comercial' | 'cliente' | 'digital' | 'tecnica'
   | 'vendasag' | 'acoes' | 'planejamento' | 'estoque' | 'equipe'
   | 'marketing' | 'monetizacao'
@@ -11,10 +11,10 @@ export type ModuleKey =
 
 export const ACCESS: Record<Role, ModuleKey[] | 'all'> = {
   admin: 'all',
-  comercial: ['dash', 'rede', 'comercial', 'cliente', 'vendasag', 'financeiro', 'alertas', 'ia'],
+  comercial: ['dash', 'rede', 'concorrencia', 'comercial', 'cliente', 'vendasag', 'financeiro', 'alertas', 'ia'],
   programacao: ['dash', 'prog', 'ia', 'alertas'],
   jornalismo: ['dash', 'jornalismo', 'ia', 'alertas'],
-  marketing: ['dash', 'marketing', 'monetizacao', 'digital', 'cliente', 'alertas'],
+  marketing: ['dash', 'concorrencia', 'marketing', 'monetizacao', 'digital', 'cliente', 'alertas'],
   operacoes: ['dash', 'vendasag', 'acoes', 'planejamento', 'estoque', 'equipe', 'alertas'],
   afiliada: ['dash', 'prog', 'jornalismo', 'comercial', 'alertas'],
   cliente: [],
@@ -31,6 +31,7 @@ export const NAV: { grp: string; cls: string; items: { key: ModuleKey; href: str
     items: [
       { key: 'dash', href: '/', label: 'Visão Geral (BI)' },
       { key: 'rede', href: '/rede', label: 'Rede & Afiliadas', pill: '6' },
+      { key: 'concorrencia', href: '/concorrencia', label: 'Concorrência', pill: 'novo' },
       { key: 'org', href: '/organograma', label: 'Organograma & Acessos' },
     ],
   },

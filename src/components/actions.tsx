@@ -37,7 +37,7 @@ export function BxfExport({ breaks, spots }: {
   return <button className="btn sm" style={{ marginLeft: 8 }} onClick={exportBxf} data-testid="bxf">Export automação (BXF)</button>;
 }
 
-/* Upload de material (portal + módulo interno) */
+/* Upload de material (portal + módulo interno) — arquivo REAL (até 8 MB) */
 export function UploadMaterial({ campaignId, token }: { campaignId: number; token?: string }) {
   const toast = useToast();
   const router = useRouter();
@@ -46,14 +46,15 @@ export function UploadMaterial({ campaignId, token }: { campaignId: number; toke
   async function onFile(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    const kind = file.type.startsWith('audio') ? 'audio' : file.type.startsWith('video') ? 'video' : 'imagem';
-    const res = await fetch('/api/materials', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ campaign_id: campaignId, token, kind, title: file.name }),
-    });
+    toast(`Enviando "${file.name}"…`, 'ok');
+    const fd = new FormData();
+    fd.append('file', file);
+    fd.append('campaign_id', String(campaignId));
+    if (token) fd.append('token', token);
+    const res = await fetch('/api/files', { method: 'POST', body: fd });
+    const data = await res.json().catch(() => ({}));
     if (res.ok) { toast(`Material "${file.name}" recebido — em análise da produção.`, 'ok'); router.refresh(); }
-    else toast('Falha ao subir material.', 'warn');
+    else toast(data.error || 'Falha ao subir material.', 'warn');
     e.target.value = '';
   }
 

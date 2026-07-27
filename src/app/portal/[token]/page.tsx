@@ -20,7 +20,7 @@ export default async function PortalPublico({ params }: { params: Promise<{ toke
     );
   }
   const [materials, proofs] = await Promise.all([
-    sql`SELECT * FROM materials WHERE campaign_id = ${campaign.id} ORDER BY id`,
+    sql`SELECT m.*, f.uuid AS file_uuid FROM materials m LEFT JOIN files f ON f.id = m.file_id WHERE m.campaign_id = ${campaign.id} ORDER BY m.id`,
     sql`SELECT * FROM airing_proofs WHERE campaign_id = ${campaign.id} ORDER BY aired_on, aired_at`,
   ]);
 
