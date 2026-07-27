@@ -24,6 +24,12 @@ export async function POST(req: NextRequest) {
     if (!ok) return NextResponse.json({ error: 'token inválido' }, { status: 403 });
   }
 
+  // MIME allowlist no upload: só áudio, imagem, vídeo e PDF
+  const type = file.type || '';
+  if (!/^(audio|image|video)\//.test(type) && type !== 'application/pdf') {
+    return NextResponse.json({ error: 'formato não permitido — envie áudio, imagem, vídeo ou PDF' }, { status: 415 });
+  }
+
   const buf = Buffer.from(await file.arrayBuffer());
   const uuid = randomUUID();
   const [f] = await sql`

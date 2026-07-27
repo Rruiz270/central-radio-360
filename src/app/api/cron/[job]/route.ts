@@ -13,19 +13,23 @@ const JOBS: Record<string, { fn: () => Promise<string>; minGapMin: number }> = {
   ops: { fn: async () => [await runPublisher(), await runCobranca(), await runEstoque()].join(' · '), minGapMin: 10 },
 };
 
-/* Executor de jobs: Vercel Cron (header do agendador), admin logado (botão "Rodar agora")
-   ou execução oportunista (?opportunistic=1 — respeita a janela mínima e roda em silêncio). */
+/* Executor de jobs. Autorização:
+   - Vercel Cron: Authorization: Bearer CRON_SECRET (env; a Vercel injeta automaticamente)
+   - Admin logado: botão "Rodar agora" (sem janela mínima)
+   - Sessão logada + ?opportunistic=1: execução silenciosa respeitando a janela mínima
+   Anônimo: 401 sempre. */
 export async function GET(req: NextRequest, { params }: { params: Promise<{ job: string }> }) {
   const { job } = await params;
   const def = JOBS[job];
   if (!def) return NextResponse.json({ error: 'job desconhecido' }, { status: 404 });
 
-  const isVercelCron = req.headers.get('x-vercel-cron') === '1' || !!req.headers.get('x-vercel-signature');
+  const secret = process.env.CRON_SECRET;
+  const isVercelCron = !!secret && req.headers.get('authorization') === `Bearer ${secret}`;
   const opportunistic = req.nextUrl.searchParams.get('opportunistic') === '1';
   const session = await getSession();
   const isAdmin = session?.role === 'admin';
 
-  if (!isVercelCron && !isAdmin && !opportunistic) {
+  if (!isVercelCron && !isAdmin && !(opportunistic && session)) {
     return NextResponse.json({ error: 'sem permissão' }, { status: 401 });
   }
   if ((opportunistic || isVercelCron) && !(await shouldRun(job, def.minGapMin))) {
