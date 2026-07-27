@@ -26,11 +26,44 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     if (!ok) return NextResponse.json({ error: 'token inválido' }, { status: 403 });
   }
 
+  const [before] = await sql`SELECT status FROM materials WHERE id = ${Number(id)}`;
   const rows = await sql`
     UPDATE materials SET status = ${status}, note = ${note || null}
     WHERE id = ${Number(id)} RETURNING *`;
   if (!rows[0]) return NextResponse.json({ error: 'não encontrado' }, { status: 404 });
+  const mat = rows[0];
   await sql`INSERT INTO audit_log (user_email, action, entity, entity_id)
     VALUES (${session?.email || 'portal-cliente'}, ${'material→' + status}, 'material', ${id})`;
-  return NextResponse.json({ ok: true, material: rows[0] });
+
+  /* Gatilho de aprovação (traffic-aware): cliente aprovou →
+     - áudio: vira SPOT no pool do Tráfego & Log, pro tráfego arrastar pro break (definir quando entra no ar)
+     - vídeo/imagem: pendência pro Digital agendar a publicação
+     Dispara só na transição para "aprovado" (não repete em re-aprovação). */
+  let triggered: string | null = null;
+  if (status === 'aprovado' && before?.status !== 'aprovado') {
+    const [camp] = await sql`SELECT tenant_id, advertiser, name FROM campaigns WHERE id = ${mat.campaign_id}`;
+    if (camp) {
+      if (mat.kind === 'audio') {
+        await sql`
+          INSERT INTO spots (tenant_id, break_id, advertiser, duration_sec, status, position)
+          VALUES (${camp.tenant_id}, NULL, ${camp.advertiser}, 30, 'aprovado', 99)`;
+        await sql`
+          INSERT INTO alert_log (tenant_id, title, wa_group, status)
+          VALUES (${camp.tenant_id}, ${`Spot aprovado pelo cliente: ${camp.advertiser} — alocar na grade`}, 'Tráfego', 'simulado')`;
+        await sql`
+          INSERT INTO internal_tasks (tenant_id, title, kind, detail, done)
+          VALUES (${camp.tenant_id}, ${`Agendar veiculação — ${camp.advertiser} (${mat.title})`}, 'pendencia', 'spot no pool do Tráfego & Log', FALSE)`;
+        triggered = 'trafego';
+      } else {
+        await sql`
+          INSERT INTO alert_log (tenant_id, title, wa_group, status)
+          VALUES (${camp.tenant_id}, ${`Material aprovado: ${camp.advertiser} (${mat.kind}) — agendar publicação`}, 'Digital', 'simulado')`;
+        await sql`
+          INSERT INTO internal_tasks (tenant_id, title, kind, detail, done)
+          VALUES (${camp.tenant_id}, ${`Agendar publicação — ${camp.advertiser} (${mat.title})`}, 'pendencia', 'material aprovado no portal', FALSE)`;
+        triggered = 'digital';
+      }
+    }
+  }
+  return NextResponse.json({ ok: true, material: mat, triggered });
 }

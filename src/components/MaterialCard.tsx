@@ -22,8 +22,17 @@ export function MaterialCard({ id, kind, title, status: initialStatus, note, tok
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: next, token }),
     });
-    if (res.ok) { setStatus(next); toast(msg, 'ok'); }
-    else toast('Não foi possível atualizar.', 'warn');
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) {
+      setStatus(next);
+      if (data.triggered === 'trafego') {
+        toast('Aprovado! Spot enviado pro Tráfego & Log — a equipe define agora em qual break entra no ar.', 'ok');
+      } else if (data.triggered === 'digital') {
+        toast('Aprovado! Pendência criada pro Digital agendar a publicação.', 'ok');
+      } else {
+        toast(msg, 'ok');
+      }
+    } else toast('Não foi possível atualizar.', 'warn');
   }
 
   function comment() {
