@@ -1,5 +1,6 @@
 /* Migração 2 — usuários/2FA, arquivos, concorrência, ingestão Pulsar, crons. Idempotente. */
 import postgres from 'postgres';
+import { randomBytes } from 'crypto';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
@@ -87,7 +88,7 @@ if (n === 0) {
 const [{ k }] = await sql`SELECT count(*)::int k FROM ingest_keys`;
 if (k === 0) {
   const [hq] = await sql`SELECT id FROM tenants WHERE is_hq LIMIT 1`;
-  const key = 'ing_' + Array.from({ length: 32 }, () => 'abcdefghijklmnopqrstuvwxyz0123456789'[Math.floor(Math.random() * 36)]).join('');
+  const key = 'ing_' + randomBytes(24).toString('hex');
   await sql`INSERT INTO ingest_keys (tenant_id, key, label) VALUES (${hq.id}, ${key}, 'Conector Pulsar — Matriz 98.5')`;
   console.log('✓ chave de ingestão criada:', key);
 }

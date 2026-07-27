@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { randomBytes } from 'crypto';
 import { sql } from '@/lib/db';
 import { requireApi } from '@/lib/guard';
 
@@ -60,7 +61,9 @@ export async function POST(req: NextRequest) {
       } else if (entity === 'campanhas') {
         // anunciante, nome, periodo, contratadas, investimento
         if (!r[0] || !r[1]) continue;
-        const token = (r[0] + '-' + r[1]).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-') + '-' + Math.random().toString(36).slice(2, 6);
+        // prefixo legível + 96 bits de entropia real (o token dá acesso ao portal da campanha)
+        const slug = (r[0] + '-' + r[1]).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').slice(0, 40);
+        const token = slug + '-' + randomBytes(12).toString('base64url');
         await sql`INSERT INTO campaigns (tenant_id, advertiser, name, token, period, contracted, investment) VALUES (${t}, ${r[0]}, ${r[1]}, ${token}, ${r[2] || null}, ${parseInt(r[3], 10) || 0}, ${num(r[4])})`;
       } else if (entity === 'equipamentos') {
         // tipo(caixa|veiculo|pendrive|outro), nome, qtd, status, obs
