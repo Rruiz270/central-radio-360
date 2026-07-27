@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Central 360 — Documentação v2.0 · Status & Roadmap de Operação</title>
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#0020b8; --blue-l:#2447ff; --cyan:#00a8e8; --yellow:#ffe200; --red:#e50012;
+    --ink:#101733; --ink2:#4c5876; --ink3:#8a94b3; --line:#e3e8f4; --bg:#f6f8fd; --card:#fff;
+    --disp:"League Spartan",-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);font-size:14.5px;line-height:1.62}
+  .hero{background:linear-gradient(120deg,#000c40,#0020b8 55%,#123ee0);color:#fff;padding:52px 24px 44px}
+  .hero .in{max-width:980px;margin:0 auto}
+  .hero .kick{font-family:var(--disp);font-weight:800;font-size:11px;letter-spacing:.28em;color:var(--yellow);text-transform:uppercase}
+  .hero h1{font-family:var(--disp);font-weight:900;font-size:40px;margin:10px 0 8px;line-height:1.05}
+  .hero p{max-width:760px;color:#c9d4f5;margin:0;font-size:15.5px}
+  .hero .meta{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px;font-size:12px;color:#9fb0e6}
+  .hero .meta b{color:#fff}
+  .hero a{color:var(--yellow)}
+  .wrap{max-width:980px;margin:0 auto;padding:34px 24px 90px}
+  h2{font-family:var(--disp);font-weight:800;font-size:24px;margin:56px 0 6px;color:var(--blue);display:flex;align-items:center;gap:12px;scroll-margin-top:20px}
+  h2 .n{background:var(--blue);color:#fff;font-size:14px;width:32px;height:32px;border-radius:9px;display:inline-grid;place-items:center;flex:none}
+  h3{font-family:var(--disp);font-weight:800;font-size:16.5px;margin:30px 0 8px}
+  p{margin:8px 0}
+  .lead{font-size:15.5px;color:var(--ink2)}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:14px 0;box-shadow:0 2px 10px rgba(16,23,51,.05)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:800px){.grid2{grid-template-columns:1fr}}
+  table{width:100%;border-collapse:collapse;font-size:13.2px;margin:12px 0;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(16,23,51,.06)}
+  th{background:#0e1c56;color:#fff;text-align:left;font-family:var(--disp);font-weight:700;font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:10px 12px}
+  td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  tr:last-child td{border-bottom:0}
+  code,.mono{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;background:#eef2fc;border:1px solid #dde5f8;border-radius:6px;padding:1px 6px;color:#12329b}
+  .chip{display:inline-flex;align-items:center;font-size:11px;font-weight:800;font-family:var(--disp);padding:3px 10px;border-radius:20px;letter-spacing:.04em;margin:2px 4px 2px 0;white-space:nowrap}
+  .ok{background:#e2f6e8;color:#157f3c} .parcial{background:#fff6c9;color:#8a6d00} .pend{background:#eef1f8;color:#5a6588} .crit{background:#fde5e7;color:#b3121f}
+  .hint{border-left:4px solid var(--blue-l);background:#eef2fd;border-radius:0 12px 12px 0;padding:12px 16px;margin:14px 0;color:#22315f}
+  .hint.y{border-left-color:#e5c700;background:#fffbe6;color:#5c4b00}
+  .hint.g{border-left-color:#25c257;background:#effaf2;color:#14532d}
+  .toc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:-58px;position:relative;box-shadow:0 12px 34px rgba(6,16,64,.14)}
+  .toc b{font-family:var(--disp);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3)}
+  .toc ol{margin:10px 0 0;padding-left:20px;columns:2;gap:34px}
+  @media(max-width:700px){.toc ol{columns:1}}
+  .toc li{margin:4px 0;font-size:13.5px}
+  .toc a{color:var(--blue);text-decoration:none;font-weight:600}
+  .fase{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--line);border-left:5px solid var(--blue);background:#fff;border-radius:12px;padding:14px 16px;margin:10px 0}
+  .fase.done{border-left-color:#25c257;opacity:.85}
+  .fase .fn{font-family:var(--disp);font-weight:900;font-size:20px;color:var(--blue);min-width:44px}
+  .fase.done .fn{color:#157f3c}
+  .fase b{font-family:var(--disp)}
+  .fase .dur{margin-left:auto;font-size:12px;font-weight:800;color:var(--ink3);font-family:var(--disp);white-space:nowrap}
+  ul{margin:6px 0;padding-left:22px}
+  li{margin:3px 0}
+  .foot{margin-top:70px;padding-top:18px;border-top:1px solid var(--line);color:var(--ink3);font-size:12px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  .big{font-family:var(--disp);font-weight:900;font-size:28px;color:var(--blue)}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}
+  @media(max-width:800px){.kpis{grid-template-columns:1fr 1fr}}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;border-top:3px solid var(--blue)}
+  .kpi .l{font-size:11px;color:var(--ink3);font-weight:700}
+  .kpi.g{border-top-color:#25c257}.kpi.y{border-top-color:#e5c700}.kpi.r{border-top-color:var(--red)}
+</style>
+</head>
+<body>
+
+<div class="hero"><div class="in">
+  <div class="kick">Metropolitana FM 98.5 · Rede + Agência de Ativação</div>
+  <h1>Central 360 — Documentação v2.0</h1>
+  <p>O sistema saiu do papel: a v1.0 está <b>no ar em produção</b>. Esta versão da documentação registra o que foi construído e testado, e detalha — em ordem de prioridade — o que falta para a plataforma operar de verdade na rotina da Metropolitana e da rede.</p>
+  <div class="meta">
+    <span>Versão <b>2.0</b></span><span>Data <b>26/07/2026</b></span>
+    <span>Produção <b><a href="https://central-radio-360.vercel.app">central-radio-360.vercel.app</a></b></span>
+    <span>Repo <b>Rruiz270/central-radio-360</b> (privado)</span>
+    <span>Base <b>doc v1.0 + mockup v0.5 + Manual de Marca mai/2026</b></span>
+  </div>
+</div></div>
+
+<div class="wrap">
+
+<div class="toc">
+  <b>Índice</b>
+  <ol>
+    <li><a href="#s1">Resumo executivo — onde estamos</a></li>
+    <li><a href="#s2">O que está no ar (construído e testado)</a></li>
+    <li><a href="#s3">Status módulo a módulo</a></li>
+    <li><a href="#s4">O que falta — gaps por prioridade</a></li>
+    <li><a href="#s5">Trilha 1 · Credenciais & integrações</a></li>
+    <li><a href="#s6">Trilha 2 · Dados reais & go-live da equipe</a></li>
+    <li><a href="#s7">Trilha 3 · Infra que falta (storage, realtime, crons)</a></li>
+    <li><a href="#s8">Trilha 4 · Conector Pulsar & playout</a></li>
+    <li><a href="#s9">Roadmap consolidado com prazos</a></li>
+    <li><a href="#s10">Riscos atuais & pendências de decisão</a></li>
+  </ol>
+</div>
+
+<!-- ============================================ -->
+<h2 id="s1"><span class="n">1</span>Resumo executivo — onde estamos</h2>
+<p class="lead">Em um dia de construção acelerada por IA, o Central 360 saiu de mockup aprovado para <b>plataforma em produção</b>, com banco multi-tenant, autenticação por perfil, os 21 módulos funcionais e duas rodadas completas de teste automatizado (toda tela, todo botão, todo perfil — local e em produção).</p>
+<div class="kpis">
+  <div class="kpi g"><div class="big">21</div><div class="l">módulos no ar</div></div>
+  <div class="kpi g"><div class="big">12</div><div class="l">perfis/logins ativos (8 papéis + 5 afiliadas)</div></div>
+  <div class="kpi y"><div class="big">6</div><div class="l">integrações aguardando credenciais</div></div>
+  <div class="kpi r"><div class="big">0</div><div class="l">dados reais da operação (tudo é demo/seed)</div></div>
+</div>
+<div class="hint g"><b>Leitura rápida:</b> o software está pronto para uso interno imediato (gestão, funil, tráfego, alertas em modo simulado). Para "operar de verdade" faltam sobretudo <b>credenciais de terceiros</b> (WhatsApp, IA, redes, NFS-e), <b>dados reais</b> (anunciantes, grade, acervo, usuários) e três peças de infra (storage de mídia, tempo real, crons). O conector Pulsar continua sendo a fase final e de maior risco — inalterado desde a v1.0.</div>
+
+<!-- ============================================ -->
+<h2 id="s2"><span class="n">2</span>O que está no ar (construído e testado)</h2>
+<div class="grid2">
+<div class="card"><h3>Fundação & segurança</h3>
+<ul>
+  <li>Next.js 15 + TypeScript na Vercel, deploy automático no push (<code>main</code>)</li>
+  <li>PostgreSQL Neon <b>multi-tenant</b> (tenant_id em tudo), migração idempotente sem DROP</li>
+  <li>Auth própria: JWT httpOnly + bcrypt; <b>RBAC por perfil</b> espelhando o organograma; menus e rotas filtrados no servidor</li>
+  <li>Portal do Cliente <b>público por link com token</b>, sem login, escopado à campanha</li>
+  <li>Auditoria (<code>audit_log</code>) de login, preços, aprovações, settings</li>
+  <li>Fixes de segurança aplicados em revisão: IDOR cross-tenant, open redirect</li>
+</ul></div>
+<div class="card"><h3>Marca & UX</h3>
+<ul>
+  <li>Identidade conforme <b>Manual de Marca (mai/2026)</b>: azul 293C, amarelo Yellow C, vermelho 485C, League Spartan</li>
+  <li><b>Logo oficial</b> (emblema extraído do manual) em sidebar, login, portal e favicon</li>
+  <li><b>Tema claro padrão</b> (estilo do próprio manual) + modo escuro "console" no toggle</li>
+  <li>Modal de lead do kanban <b>idêntico ao mockup</b> (histórico, materiais, 5 ações)</li>
+  <li>2 rodadas de teste Playwright + varredura exaustiva de cliques em produção</li>
+</ul></div>
+</div>
+<div class="card"><h3>Funcionalidades operacionais já reais (persistem no banco)</h3>
+<ul>
+  <li><b>Funil kanban</b> (rádio e agência): arrastar, abrir lead, avançar etapa, marcar Ganho → dispara gatilho e navega pra execução</li>
+  <li><b>Tráfego & Log:</b> alocação de spots em breaks com <b>validação ANATEL no servidor</b> (recusa estouro com 422) + <b>export BXF</b> real</li>
+  <li><b>Pedidos & Avails</b> (order entry), rate card com Pricing Copilot aplicável, deals com pace vs. meta anual</li>
+  <li><b>Motor de gatilhos WhatsApp:</b> 12 regras por área, liga/desliga, teste, criação de novas — modo simulado honesto até plugar WABA</li>
+  <li><b>Radar do Jornalista:</b> pautas curadas + disparo (simulado) pro grupo da redação; espelho de pauta com criação</li>
+  <li><b>Central de Marketing:</b> composer multi-rede, "Gerar com IA" (com fallback), trends → post 1 clique, fila de publicações</li>
+  <li><b>Portal do Cliente:</b> KPIs da campanha, aprovação/reprovação/comentário de materiais, <b>upload</b> pelo cliente, comprovação de veiculação</li>
+  <li><b>Financeiro:</b> faturas com emissão NFS-e (stub que marca emitida + auditoria), aging com risco IA, receita por origem</li>
+  <li><b>Agência:</b> briefing → quadro de execução com ficha e checklist; inventário de equipamentos/frota e escala com cadastro</li>
+  <li><b>Rede:</b> mapa clicável, painel por praça com fases de migração, criação de afiliada</li>
+  <li><b>Configurações → Integrações:</b> chaves de API gravadas no banco (mascaradas), valem sem redeploy — só admin</li>
+</ul></div>
+
+<!-- ============================================ -->
+<h2 id="s3"><span class="n">3</span>Status módulo a módulo</h2>
+<table>
+<tr><th>Módulo</th><th>Status</th><th>O que falta pra "de verdade"</th></tr>
+<tr><td><b>Visão Geral (BI)</b></td><td><span class="chip ok">no ar</span></td><td>Ligar KPIs a dados reais quando a operação alimentar o sistema</td></tr>
+<tr><td><b>Rede & Afiliadas</b></td><td><span class="chip ok">no ar</span></td><td>Fases de migração viram reais conforme o conector Pulsar rodar (§8)</td></tr>
+<tr><td><b>Organograma & Acessos</b></td><td><span class="chip ok">no ar</span></td><td>Usuários reais + senhas individuais (§6)</td></tr>
+<tr><td><b>Programação & Musical</b></td><td><span class="chip parcial">parcial</span></td><td>Acervo real (import Pulsar); "gerar grade por metas" hoje é prévia — solver real na fase do playout</td></tr>
+<tr><td><b>Jornalismo & Radar</b></td><td><span class="chip parcial">parcial</span></td><td>Ligar o scraping real (motor i10 pronto) num cron diário + WABA pro disparo</td></tr>
+<tr><td><b>Comercial & Vendas</b></td><td><span class="chip ok">no ar</span></td><td>Anunciantes/pedidos reais; crédito automático (hoje ilustrativo)</td></tr>
+<tr><td><b>Portal do Cliente</b></td><td><span class="chip parcial">parcial</span></td><td>Storage R2 pros arquivos (hoje upload registra metadados); relatório automático por WhatsApp no fim da campanha</td></tr>
+<tr><td><b>Digital & Podcast</b></td><td><span class="chip pend">vitrine</span></td><td>Ligar métricas reais (YouTube/streaming) via OAuth</td></tr>
+<tr><td><b>Técnica & Engenharia</b></td><td><span class="chip pend">vitrine</span></td><td>Watchdog de silêncio + status real do transmissor (fase playout)</td></tr>
+<tr><td><b>Vendas Agência</b></td><td><span class="chip ok">no ar</span></td><td>—</td></tr>
+<tr><td><b>Ações & Execução</b></td><td><span class="chip ok">no ar</span></td><td>Checklist de campo editável pelo celular do promotor (é web, já funciona; falta hábito/treino)</td></tr>
+<tr><td><b>Planejamento & Criação</b></td><td><span class="chip ok">no ar</span></td><td>—</td></tr>
+<tr><td><b>Equipamentos & Frota</b></td><td><span class="chip ok">no ar</span></td><td>Gatilho automático de estoque mínimo já existe; definir mínimos reais</td></tr>
+<tr><td><b>Equipe & Promotores</b></td><td><span class="chip ok">no ar</span></td><td>—</td></tr>
+<tr><td><b>Central de Marketing</b></td><td><span class="chip parcial">parcial</span></td><td>OAuth + App Review Meta/TikTok/YouTube → publicação automática real (hoje fila interna); cron publicador (§7)</td></tr>
+<tr><td><b>Monetização Social</b></td><td><span class="chip parcial">parcial</span></td><td>Receitas reais via YouTube Analytics (OAuth) + exports TikTok</td></tr>
+<tr><td><b>IA & Automação</b></td><td><span class="chip parcial">parcial</span></td><td>Chaves Claude/OpenAI (1 clique em Configurações); locução IA depende de TTS + autorização do locutor</td></tr>
+<tr><td><b>Comunicação & Alertas</b></td><td><span class="chip parcial">parcial</span></td><td><b>WABA + token Meta</b> → alertas reais (código pronto, hoje simula e registra)</td></tr>
+<tr><td><b>Gestão Interna</b></td><td><span class="chip ok">no ar</span></td><td>—</td></tr>
+<tr><td><b>Financeiro</b></td><td><span class="chip parcial">parcial</span></td><td>Agregador NFS-e + certificado digital; Omie/Vindi/Pagar.me (motores i10 a portar)</td></tr>
+<tr><td><b>Configurações & Integrações</b></td><td><span class="chip ok">no ar</span></td><td>—</td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2 id="s4"><span class="n">4</span>O que falta — gaps por prioridade</h2>
+<p class="lead">Quatro trilhas independentes. As trilhas 1 e 2 não são de engenharia — são <b>providências de negócio</b> que destravam código já pronto. As trilhas 3 e 4 são desenvolvimento.</p>
+<table>
+<tr><th>#</th><th>Gap</th><th>Trilha</th><th>Impacto se não fizer</th><th>Esforço</th></tr>
+<tr><td>1</td><td><b>WhatsApp Business (WABA + token)</b></td><td>Credenciais</td><td>Alertas, cobrança e radar ficam em modo simulado</td><td>Negócio: 2–5 dias (Meta) · Dev: 0</td></tr>
+<tr><td>2</td><td><b>Usuários reais + senhas individuais</b></td><td>Go-live</td><td>Senha demo compartilhada = risco e zero responsabilização</td><td>Dev: ½ dia (tela admin de usuários + 2FA)</td></tr>
+<tr><td>3</td><td><b>Dados reais</b> (anunciantes, pedidos, grade, campanhas)</td><td>Go-live</td><td>Sistema vira vitrine, não ferramenta</td><td>Operação: 1 semana de digitação assistida + importadores CSV (dev: 1 dia)</td></tr>
+<tr><td>4</td><td><b>Chaves Claude/OpenAI</b></td><td>Credenciais</td><td>IA em modo template</td><td>5 minutos (colar em Configurações)</td></tr>
+<tr><td>5</td><td><b>Storage R2 + upload real de mídia</b></td><td>Infra</td><td>Materiais do portal sem arquivo de verdade</td><td>Dev: 1–2 dias (URL assinada, CDN)</td></tr>
+<tr><td>6</td><td><b>Crons/workers</b> (radar, publicador, cobrança, métricas)</td><td>Infra</td><td>Nada roda sozinho de madrugada</td><td>Dev: 2–3 dias (Mac mini cron + Vercel cron)</td></tr>
+<tr><td>7</td><td><b>OAuth Meta/YouTube/TikTok + App Review</b></td><td>Credenciais</td><td>Publicação social manual</td><td>Negócio: 2–6 semanas (reviews) · Dev: 3–4 dias</td></tr>
+<tr><td>8</td><td><b>NFS-e</b> (certificado + Focus NFe/eNotas)</td><td>Credenciais</td><td>Emissão fiscal fora do sistema</td><td>Negócio: certificado A1 · Dev: 2 dias</td></tr>
+<tr><td>9</td><td><b>Omie/Vindi/Pagar.me</b> (conciliação)</td><td>Credenciais</td><td>Aging manual</td><td>Dev: 3–4 dias (porte dos motores i10)</td></tr>
+<tr><td>10</td><td><b>Tempo real</b> (SSE: no-ar, alertas ao vivo)</td><td>Infra</td><td>Telas atualizam por refresh</td><td>Dev: 1–2 dias</td></tr>
+<tr><td>11</td><td><b>Observabilidade</b> (Sentry + uptime + backup export)</td><td>Infra</td><td>Falha silenciosa em sistema 24/7</td><td>Dev: 1 dia</td></tr>
+<tr><td>12</td><td><b>Domínio próprio</b> (ex.: <code>central360.metropolitana.fm</code>)</td><td>Go-live</td><td>URL vercel.app menos profissional</td><td>DNS: 1 hora</td></tr>
+<tr><td>13</td><td><b>Conector Pulsar F1–F3</b> (diagnóstico → espelhamento)</td><td>Pulsar</td><td>Acervo/log dependem de digitação</td><td>Dev: 2–4 semanas (depende do diagnóstico na rádio)</td></tr>
+<tr><td>14</td><td><b>Kantar</b> (contrato + import de exports)</td><td>Credenciais</td><td>Audiência sem "moeda oficial"</td><td>Negócio: contrato · Dev: 1–2 dias de import</td></tr>
+<tr><td>15</td><td><b>TTS/locução IA</b> (ElevenLabs + autorização do locutor)</td><td>Credenciais</td><td>Madrugada segue sem locução IA</td><td>Negócio: autorização · Dev: 2 dias</td></tr>
+<tr><td>16</td><td><b>Playout piloto</b> (Liquidsoap/Icecast madrugada)</td><td>Pulsar</td><td>—</td><td>Dev: 3–4 semanas, só após F3</td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2 id="s5"><span class="n">5</span>Trilha 1 · Credenciais & integrações (destravam código pronto)</h2>
+<div class="card">
+<table>
+<tr><th>Credencial</th><th>Quem providencia</th><th>Onde entra</th><th>O que liga na hora</th></tr>
+<tr><td><b>WABA + token System User + Phone ID</b></td><td>Marketing/TI com Meta Business</td><td>Configurações → Integrações (ou env)</td><td>12 gatilhos por área, radar da redação, cobrança, aviso ao cliente do funil</td></tr>
+<tr><td><b>ANTHROPIC_API_KEY</b> (Claude)</td><td>Já temos conta — colar</td><td>Configurações → Integrações</td><td>Posts por IA, copilots; modelo indicado: <code>claude-sonnet-5</code></td></tr>
+<tr><td><b>OPENAI_API_KEY</b></td><td>Já temos conta — colar</td><td>Configurações → Integrações</td><td>Geração de imagem das artes (gpt-image-1) + texto alternativo</td></tr>
+<tr><td><b>App Meta (App ID/Secret) + review</b></td><td>Marketing (processo Meta)</td><td>Configurações → Integrações</td><td>Publicar IG/FB automático + insights + receita reels</td></tr>
+<tr><td><b>OAuth YouTube</b></td><td>Dono do canal</td><td>Configurações → Integrações</td><td>Agendar vídeos + AdSense na Monetização</td></tr>
+<tr><td><b>TikTok for Developers</b></td><td>Marketing</td><td>Configurações → Integrações</td><td>Content Posting + métricas</td></tr>
+<tr><td><b>Certificado digital A1 + agregador NFS-e</b></td><td>Financeiro/contabilidade</td><td>Agregador (Focus NFe ~R$ 100–400/mês)</td><td>Emissão fiscal em lote/on-demand de verdade</td></tr>
+<tr><td><b>Chaves Omie / Vindi / Pagar.me</b></td><td>Financeiro (já existem no grupo)</td><td>Configurações → Integrações</td><td>Conciliação automática → aging real</td></tr>
+<tr><td><b>Contrato Kantar por praça</b></td><td>Direção comercial</td><td>Import de exports (Client Center)</td><td>Share oficial no BI e no argumento de venda</td></tr>
+<tr><td><b>Autorização de voz do locutor</b></td><td>Jurídico + locutor</td><td>ElevenLabs (voz clonada)</td><td>Locução IA da madrugada</td></tr>
+</table>
+<div class="hint y"><b>Ordem sugerida (igual à v1.0, agora com o sistema esperando):</b> 1) WABA — maior retorno imediato · 2) chaves de IA — 5 minutos · 3) OAuth Meta/YouTube (iniciar reviews já, demoram semanas) · 4) NFS-e · 5) Omie/Vindi · 6) Kantar · 7) voz.</div>
+</div>
+
+<!-- ============================================ -->
+<h2 id="s6"><span class="n">6</span>Trilha 2 · Dados reais & go-live da equipe</h2>
+<div class="grid2">
+<div class="card"><h3>Dados a carregar (semana de go-live)</h3>
+<ul>
+  <li><b>Anunciantes ativos</b> da 98.5 + contratos vigentes → funil e deals</li>
+  <li><b>Pedidos/flights do mês</b> → tráfego passa a refletir a grade real</li>
+  <li><b>Campanhas ativas</b> → portais de cliente com link enviado a cada anunciante</li>
+  <li><b>Grade de breaks real</b> (hoje 3 breaks demo) + rate card oficial</li>
+  <li><b>Equipe/escala e inventário reais</b> da agência</li>
+  <li>Ferramenta: <b>importadores CSV</b> (dev: 1 dia) + digitação assistida</li>
+</ul></div>
+<div class="card"><h3>Acessos & governança</h3>
+<ul>
+  <li>Tela admin de <b>gestão de usuários</b> (criar/desativar, reset de senha) — dev: ½ dia</li>
+  <li><b>Senhas individuais fortes</b> substituem a demo <code>metro360</code> no primeiro dia de uso real</li>
+  <li><b>2FA</b> para Administração e Financeiro (previsto na v1.0 §11)</li>
+  <li>Treinamento por perfil (1h por área, roteiro pronto pelos próprios módulos)</li>
+  <li><b>LGPD:</b> opt-out nos disparos, aviso de privacidade no portal do cliente, retenção definida</li>
+</ul></div>
+</div>
+
+<!-- ============================================ -->
+<h2 id="s7"><span class="n">7</span>Trilha 3 · Infra que falta</h2>
+<table>
+<tr><th>Peça</th><th>Solução</th><th>Detalhe</th><th>Esforço</th></tr>
+<tr><td><b>Storage de mídia</b></td><td>Cloudflare R2 + URL assinada</td><td>Spots, artes, vídeos, comprovações; o upload do portal passa a guardar o arquivo (hoje só metadados)</td><td>1–2 dias</td></tr>
+<tr><td><b>Crons / workers</b></td><td>Vercel Cron + Mac mini (24/7)</td><td>Radar scraping 06h30 → pautas reais; publicador da fila de posts; régua de cobrança diária; sync de métricas sociais; verificação de estoque</td><td>2–3 dias</td></tr>
+<tr><td><b>Tempo real</b></td><td>SSE (ou Pusher)</td><td>"No ar agora", fila de alertas e aprovações do cliente sem refresh</td><td>1–2 dias</td></tr>
+<tr><td><b>Observabilidade</b></td><td>Sentry + Better Stack</td><td>Erro de API, cron que falhou e uptime — alerta no WhatsApp da Técnica (dogfooding do próprio motor)</td><td>1 dia</td></tr>
+<tr><td><b>Backups</b></td><td>Neon PITR + export p/ R2</td><td>PITR já existe no Neon; adicionar export diário agendado</td><td>½ dia</td></tr>
+<tr><td><b>Domínio + e-mail</b></td><td>DNS da Metropolitana</td><td><code>central360.metropolitana.fm</code> + remetente transacional (links de portal)</td><td>1 hora + DNS</td></tr>
+</table>
+
+<!-- ============================================ -->
+<h2 id="s8"><span class="n">8</span>Trilha 4 · Conector Pulsar & playout (inalterado da v1.0 §7)</h2>
+<p class="lead">A estratégia segue a mesma: <b>a API é nossa</b> (<code>POST /api/v1/ingest</code> com chave por praça — a construir), o conector local é o adaptador. Nada disso bloqueia o uso comercial/gestão do sistema — roda em paralelo.</p>
+<div class="fase"><div class="fn">F1</div><div><b>Diagnóstico na 98.5</b> — descobrir SGBD/exports/logs do Pulsar da matriz; ficha técnica da praça. <i>Primeira ação prática: 1 visita técnica à máquina da rádio.</i></div><div class="dur">1–2 sem</div></div>
+<div class="fase"><div class="fn">F2</div><div><b>API de ingestão + conector</b> — <code>/api/v1/ingest</code> multi-praça + binário local (Go) com fila e reenvio idempotente.</div><div class="dur">2 sem</div></div>
+<div class="fase"><div class="fn">F3</div><div><b>Espelhamento</b> — acervo, grade e log real alimentando Programação e a comprovação de veiculação do portal (divergência &lt; 1%).</div><div class="dur">2–3 sem</div></div>
+<div class="fase"><div class="fn">F4+</div><div><b>Piloto de playout madrugada → cutover → rollout da rede</b> — Liquidsoap + Icecast, watchdog de silêncio, 30 noites de validação, praça a praça.</div><div class="dur">contínuo</div></div>
+<div class="hint">Em paralelo: contato comercial com a Pulsar Multimedia (11 3285-3915) propondo export oficial — se existir, o conector simplifica; a arquitetura não muda.</div>
+
+<!-- ============================================ -->
+<h2 id="s9"><span class="n">9</span>Roadmap consolidado com prazos</h2>
+<p class="lead">Assumindo o mesmo modelo da construção (dev acelerado por IA) + providências de negócio andando em paralelo.</p>
+<div class="fase done"><div class="fn">✓</div><div><b>Fase 0–2 da v1.0 — CONCLUÍDAS</b> — fundação, design system da marca, auth/RBAC, 21 módulos, portal, alertas (simulado), IA plugável, testes e produção.</div><div class="dur">feito</div></div>
+<div class="fase"><div class="fn">S1</div><div><b>Semana 1 — Operar internamente</b> — WABA (negócio) · chaves IA (5 min) · tela de usuários + senhas individuais + 2FA · importadores CSV · carga de dados reais · domínio próprio · Sentry/backup. <i>Fim da semana: equipe usando de verdade, alertas reais no WhatsApp.</i></div><div class="dur">1 sem</div></div>
+<div class="fase"><div class="fn">S2</div><div><b>Semana 2 — Rodar sozinho</b> — crons (radar real de manhã, publicador, cobrança, métricas) · storage R2 com upload real · SSE tempo real · relatório automático de campanha ao cliente.</div><div class="dur">1 sem</div></div>
+<div class="fase"><div class="fn">S3–4</div><div><b>Semanas 3–4 — Dinheiro & social</b> — NFS-e real (certificado + agregador) · porte Omie/Vindi/Pagar.me → aging automático · OAuth publicação (na medida que os reviews saírem) · import Kantar.</div><div class="dur">2 sem ∥</div></div>
+<div class="fase"><div class="fn">S3–6</div><div><b>Conector Pulsar F1–F3</b> — diagnóstico na matriz, API de ingestão, espelhamento do acervo/log. Roda em paralelo às semanas 3–6 (trilha do dev de integrações).</div><div class="dur">3–4 sem ∥</div></div>
+<div class="fase"><div class="fn">S7+</div><div><b>Playout piloto madrugada → cutover → rollout da rede</b> — com locução IA se a autorização de voz sair.</div><div class="dur">contínuo</div></div>
+<div class="hint g"><b>Meta realista: sistema operando a rotina completa da matriz em ~2 semanas</b> (S1+S2), financeiro/social plenos em ~4, e espelhamento Pulsar em ~6 — mantendo o playout como última etapa, sem risco de sair do ar.</div>
+
+<!-- ============================================ -->
+<h2 id="s10"><span class="n">10</span>Riscos atuais & pendências de decisão</h2>
+<table>
+<tr><th>Item</th><th>Tipo</th><th>Recomendação</th></tr>
+<tr><td>Senha demo compartilhada em produção</td><td><span class="chip crit">risco</span></td><td>Trocar por senhas individuais no 1º dia de uso real (S1) — meia hora de trabalho</td></tr>
+<tr><td>App Review Meta/TikTok demora semanas</td><td><span class="chip crit">risco</span></td><td>Iniciar os processos <b>agora</b>, operar agendamento semi-manual até aprovar (igual v1.0 §12)</td></tr>
+<tr><td>Diagnóstico do Pulsar pode achar máquina sem acesso</td><td><span class="chip crit">risco</span></td><td>Plano B já previsto: importação assistida por CSV + contato comercial com a Pulsar</td></tr>
+<tr><td>Vetor oficial do logo (AI/EPS)</td><td><span class="chip parcial">pendência</span></td><td>Pedir à agência da marca; hoje usamos extração em alta do PDF (fiel, mas raster)</td></tr>
+<tr><td>Manual de marca é da afiliada "Cidade 100.1"</td><td><span class="chip parcial">decisão</span></td><td>Confirmar com o marketing se a matriz 98.5 tem lockup próprio (usamos o emblema, que é comum à rede)</td></tr>
+<tr><td>Nome do domínio de produção</td><td><span class="chip parcial">decisão</span></td><td>Sugestão: <code>central360.metropolitana.fm</code> — precisa do DNS da rádio</td></tr>
+<tr><td>Quem opera cada módulo no dia 1</td><td><span class="chip parcial">decisão</span></td><td>Mapear 1 "champion" por área (a v1.0 §12 previu isso pro rollout das afiliadas também)</td></tr>
+</table>
+
+<div class="foot">
+  <span>Central 360 — Documentação v2.0 · Status & Roadmap de Operação · Metropolitana FM 98.5 · 26/07/2026</span>
+  <span>Produção: central-radio-360.vercel.app · Instituto i10</span>
+</div>
+
+</div>
+</body>
+</html>
