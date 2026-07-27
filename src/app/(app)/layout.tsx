@@ -24,7 +24,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <div className="brand">
             <span className="memblem">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.svg" width={34} height={34} alt="Metropolitana" />
+              <img src="/logo.png" width={34} height={34} alt="Metropolitana" />
             </span>
             <div className="txt">
               <div className="nome">Central 360</div>
@@ -34,7 +34,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <div className="cliente">
             <span className="memblem">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.svg" width={26} height={26} alt="" />
+              <img src="/logo.png" width={26} height={26} alt="" />
             </span>
             <div>
               <b>{session.tenantName}</b>

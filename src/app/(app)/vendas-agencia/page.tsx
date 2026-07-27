@@ -25,7 +25,7 @@ export default async function VendasAgenciaPage() {
         Funil de <b>vendas de ativações</b> (agência). Arraste as oportunidades entre as etapas. Ao fechar, a ficha vai
         direto para <b>Ações & Execução</b> com a logística.
       </Hint>
-      <Kanban deals={deals as never} stages={['Lead', 'Briefing', 'Proposta', 'Negociação', 'Ganho']} pipeline="agencia" wonStage="Ganho" />
+      <Kanban deals={deals as never} stages={["Lead", "Briefing", "Proposta", "Negociação", "Ganho"]} pipeline="agencia" wonStage="Ganho" praca={session.tenantName.includes("Matriz") ? "98.5 · SP" : session.tenantName} />
     </section>
   );
 }

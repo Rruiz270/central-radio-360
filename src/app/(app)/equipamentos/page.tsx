@@ -1,6 +1,7 @@
 import { sql } from '@/lib/db';
 import { requireModule } from '@/lib/guard';
-import { Card, Chip, Hint } from '@/components/ui';
+import { Card, Chip, Hint, SecTitle } from '@/components/ui';
+import { QuickAdd } from '@/components/QuickAdd';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,6 +21,26 @@ export default async function EquipamentosPage() {
 
   return (
     <section className="view on">
+      <SecTitle
+        right={
+          <QuickAdd
+            label="+ Novo equipamento"
+            title="Cadastrar equipamento / veículo"
+            endpoint="/api/equipment"
+            small
+            fields={[
+              { key: 'name', label: 'Nome (ex.: Caixa JBL 15", Van — ABC1D23)', full: true },
+              { key: 'kind', label: 'Tipo', type: 'select', options: ['Caixa de som', 'Veículo', 'Pendrive', 'Outro'] },
+              { key: 'qty', label: 'Quantidade', value: '1' },
+              { key: 'status', label: 'Status', type: 'select', options: ['Disponível', 'Em campo', 'Manutenção', 'Crítico'] },
+              { key: 'note', label: 'Observação' },
+            ]}
+            successMsg="Equipamento cadastrado no inventário."
+          />
+        }
+      >
+        Inventário da agência
+      </SecTitle>
       <div className="cards g3">
         <Card title="Caixas de som" tag={`${totalCaixas} no total`}>
           {caixas.map((e) => (

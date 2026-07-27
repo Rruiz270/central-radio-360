@@ -42,7 +42,7 @@ export default async function ComercialPage() {
                   <span><WoTag />&nbsp; prática trazida do WideOrbit Traffic</span>
                   <span><AiTag />&nbsp; diferencial exclusivo Central 360</span>
                 </div>
-                <Kanban deals={deals as never} stages={['Lead', 'Contato', 'Proposta', 'Fechado']} pipeline="radio" wonStage="Fechado" />
+                <Kanban deals={deals as never} stages={["Lead", "Contato", "Proposta", "Fechado"]} pipeline="radio" wonStage="Fechado" praca={session.tenantName.includes("Matriz") ? "98.5 · SP" : session.tenantName} />
               </>
             ),
           },

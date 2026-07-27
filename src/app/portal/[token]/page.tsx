@@ -30,7 +30,7 @@ export default async function PortalPublico({ params }: { params: Promise<{ toke
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 22, flexWrap: 'wrap' }}>
           <span className="memblem" style={{ background: '#fff', borderRadius: 11, padding: '5px 7px', display: 'inline-flex' }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/logo.svg" width={34} height={34} alt="Metropolitana" />
+            <img src="/logo.png" width={34} height={34} alt="Metropolitana" />
           </span>
           <div>
             <div className="crumb" style={{ fontSize: 10, letterSpacing: '.18em', textTransform: 'uppercase', color: 'var(--txt-3)', fontWeight: 800 }}>

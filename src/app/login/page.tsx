@@ -38,7 +38,7 @@ function LoginForm() {
       <form className="login-card" onSubmit={submit}>
         <span className="memblem" style={{ background: '#fff', borderRadius: 12, padding: '6px 8px', display: 'inline-flex' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" width={40} height={40} alt="Metropolitana" />
+          <img src="/logo.png" width={40} height={40} alt="Metropolitana" />
         </span>
         <div className="sub" style={{ marginTop: 14 }}>Metropolitana · 98.5</div>
         <h1 className="disp">Central 360</h1>

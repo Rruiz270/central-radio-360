@@ -359,3 +359,131 @@
 }
 .mapwrap-svg{max-width:520px;margin:0 auto}
 .mapdot{cursor:pointer}
+
+/* ============================================================
+   TEMA CLARO (padrão) — seguindo o manual da marca: fundo branco,
+   azul 293C como cor de destaque. Sidebar permanece azul-marca.
+   O tema escuro original ("console") fica disponível no toggle.
+   ============================================================ */
+html[data-theme="light"] body{
+  background:#f2f5fb;
+  color:#101733;
+}
+html[data-theme="light"] body::before{
+  background-image:radial-gradient(rgba(16,35,120,.055) 1px,transparent 1.4px);
+}
+html[data-theme="light"]{
+  --bg:#f2f5fb; --card:#ffffff; --card2:#f7f9ff;
+  --linha:#e3e8f4; --linha2:#c9d4ee;
+  --txt:#101733; --txt-2:#4c5876; --txt-3:#8a94b3;
+  --glow:0 0 0 rgba(0,0,0,0);
+  --sombra:0 2px 12px rgba(16,23,51,.07);
+}
+html[data-theme="light"] ::selection{background:rgba(0,32,184,.18);color:#101733}
+html[data-theme="light"] ::-webkit-scrollbar-thumb{background:#c9d4ee;border-color:#f2f5fb}
+
+/* topo */
+html[data-theme="light"] .top{background:rgba(255,255,255,.86);border-bottom:1px solid var(--linha)}
+html[data-theme="light"] .top h1{color:#0e1c56}
+html[data-theme="light"] .clock b{color:#0e1c56}
+html[data-theme="light"] .search input{background:#fff;border-color:var(--linha2);color:#101733}
+html[data-theme="light"] .rolesel{background:#fff;border-color:var(--linha2)}
+html[data-theme="light"] .rolesel b{color:#0020b8 !important}
+html[data-theme="light"] .top .bell{background:#fff;border-color:var(--linha2);color:#4c5876}
+html[data-theme="light"] .top .bell:after{border-color:#fff}
+
+/* cards / kpis / seções */
+html[data-theme="light"] .card{background:#fff;border-color:var(--linha);box-shadow:var(--sombra)}
+html[data-theme="light"] .card .hd h3{color:#0e1c56}
+html[data-theme="light"] .kpi .val{color:#0e1c56;text-shadow:none}
+html[data-theme="light"] .sec-title h2{color:#0e1c56}
+html[data-theme="light"] .sec-title .ln{background:linear-gradient(90deg,rgba(0,32,184,.25),transparent)}
+html[data-theme="light"] .b, html[data-theme="light"] td .b, html[data-theme="light"] td.b{color:#101733}
+html[data-theme="light"] .list-li b, html[data-theme="light"] .task b, html[data-theme="light"] .kcard b{color:#101733}
+html[data-theme="light"] .aff .h b, html[data-theme="light"] .plat b{color:#101733}
+html[data-theme="light"] .matcard .mc b{color:#101733}
+html[data-theme="light"] .dep b{color:#101733}
+
+/* tabelas */
+html[data-theme="light"] th{color:#6a76a0;border-bottom-color:var(--linha)}
+html[data-theme="light"] td{border-bottom-color:var(--linha);color:#4c5876}
+html[data-theme="light"] tbody tr:hover td, html[data-theme="light"] tr:hover td{background:rgba(0,32,184,.035)}
+
+/* botões / chips / switches */
+html[data-theme="light"] .btn{background:#fff;border-color:var(--linha2);color:#22315f}
+html[data-theme="light"] .btn:hover{background:#eef2fd;border-color:#5f7bff}
+html[data-theme="light"] .btn.p{background:linear-gradient(135deg,#0020b8,#2447ff);color:#fff;box-shadow:0 4px 14px rgba(0,32,184,.25)}
+html[data-theme="light"] .btn.y{color:#231d00}
+html[data-theme="light"] .subtabs button{background:#fff;border-color:var(--linha2);color:#4c5876}
+html[data-theme="light"] .subtabs button.on{background:linear-gradient(135deg,#0020b8,#2447ff);color:#fff;box-shadow:0 4px 14px rgba(0,32,184,.25)}
+html[data-theme="light"] .c-blue{background:#e6ecfd;color:#12329b;border-color:#c4d0f5}
+html[data-theme="light"] .c-teal{background:#dff4fb;color:#0b6e94;border-color:#b5e2f2}
+html[data-theme="light"] .c-green{background:#e2f6e8;color:#157f3c;border-color:#bfe8cd}
+html[data-theme="light"] .c-amber{background:#fff6c9;color:#8a6d00;border-color:#efe094}
+html[data-theme="light"] .c-red{background:#fde5e7;color:#b3121f;border-color:#f6c3c8}
+html[data-theme="light"] .c-gray{background:#eef1f8;color:#5a6588;border-color:#d8dfef}
+html[data-theme="light"] .sw{background:#d7defc;border-color:var(--linha2)}
+html[data-theme="light"] .wa{background:#e2f6e8;color:#157f3c;border-color:#bfe8cd}
+html[data-theme="light"] .lock{color:#157f3c}
+html[data-theme="light"] .wotag{background:#e0f4fc;color:#0b6e94;border-color:#a8dcf0}
+
+/* forms */
+html[data-theme="light"] .field input, html[data-theme="light"] .field select{background:#fff;border-color:var(--linha2);color:#101733}
+html[data-theme="light"] .field input:focus, html[data-theme="light"] .field select:focus{border-color:#2447ff;box-shadow:0 0 0 3px rgba(0,32,184,.12)}
+html[data-theme="light"] .field select option{background:#fff;color:#101733}
+html[data-theme="light"] .composer textarea{background:#fff;border-color:var(--linha2);color:#101733}
+html[data-theme="light"] .pchk{background:#fff;border-color:var(--linha2);color:#4c5876}
+html[data-theme="light"] .pchk.on{background:#e6ecfd;border-color:#2447ff;color:#12329b;box-shadow:none}
+
+/* kanban / board / breaks */
+html[data-theme="light"] .kcol, html[data-theme="light"] .col{background:#eef1f8;border-color:var(--linha)}
+html[data-theme="light"] .kcol h4, html[data-theme="light"] .col h4{color:#5a6588}
+html[data-theme="light"] .kcol h4 .n, html[data-theme="light"] .col h4 .n{background:#fff;border-color:var(--linha)}
+html[data-theme="light"] .kcard, html[data-theme="light"] .task{background:#fff;border-color:var(--linha)}
+html[data-theme="light"] .kcol.over{background:#e6ecfd;border-color:#2447ff}
+html[data-theme="light"] .kval{color:#0b6e94}
+html[data-theme="light"] .bar{background:#e3e8f4}
+html[data-theme="light"] .brk{background:#fff;border-color:var(--linha)}
+html[data-theme="light"] .brk .meter{background:#e3e8f4}
+html[data-theme="light"] .brk .slots{background:#f2f5fb;border-color:#c9d4ee}
+html[data-theme="light"] .spotpool{background:#f7f9ff;border-color:#c9d4ee}
+html[data-theme="light"] .spotchip{background:#e6ecfd;border-color:#c4d0f5;color:#12329b}
+html[data-theme="light"] .grade .lv0{background:rgba(16,35,120,.06)}
+html[data-theme="light"] .grade td{border-color:rgba(16,35,120,.08)}
+html[data-theme="light"] .grade .dia{color:#6a76a0}
+
+/* hints / modals / toasts */
+html[data-theme="light"] .hint{background:#eef2fd;border-color:#c4d0f5;border-left-color:#2447ff;color:#22315f}
+html[data-theme="light"] .hint.y{background:#fffbe6;border-color:#efe094;border-left-color:#e5c700;color:#5c4b00}
+html[data-theme="light"] .hint.r{background:#fdf0f1;border-color:#f6c3c8;border-left-color:#e50012;color:#7a2a30}
+html[data-theme="light"] .modal{background:#fff;border-color:var(--linha2);box-shadow:0 30px 90px rgba(16,23,51,.25)}
+html[data-theme="light"] .modal .mh h3{color:#0e1c56}
+html[data-theme="light"] .modal .mx{background:#eef1f8;color:#5a6588}
+html[data-theme="light"] .mgrid .v{color:#101733}
+html[data-theme="light"] .tl:before{background:#c9d4ee}
+html[data-theme="light"] .tl .ti{color:#4c5876}
+html[data-theme="light"] .tl .ti b{color:#101733}
+html[data-theme="light"] .tl .ti:before{border-color:#fff}
+html[data-theme="light"] .toast{background:#fff;color:#101733;border-color:var(--linha2);box-shadow:0 14px 40px rgba(16,23,51,.18)}
+html[data-theme="light"] .toast .tk{background:#eef1f8}
+html[data-theme="light"] .step{background:#fff;border-color:var(--linha2);color:#4c5876}
+html[data-theme="light"] .step.now{color:#0e1c56;box-shadow:0 0 0 3px rgba(0,32,184,.12)}
+html[data-theme="light"] .check{color:#4c5876}
+html[data-theme="light"] .drop{background:#f7f9ff;border-color:#c9d4ee;color:#4c5876}
+html[data-theme="light"] .drop:hover{background:#e6ecfd;color:#12329b;border-color:#2447ff}
+html[data-theme="light"] .plat{background:#fff;border-color:var(--linha)}
+html[data-theme="light"] .aff{background:#fff;border-color:var(--linha)}
+html[data-theme="light"] .aff.matriz{border-color:#e5c700;box-shadow:0 2px 14px rgba(229,199,0,.15)}
+html[data-theme="light"] .mini .v{color:#0e1c56}
+html[data-theme="light"] .orgcol{background:#fff;border-color:var(--linha)}
+html[data-theme="light"] .dep{border-color:var(--linha)}
+html[data-theme="light"] .dep .roles span{background:#eef1f8;border-color:var(--linha);color:#4c5876}
+html[data-theme="light"] .matcard{background:#fff;border-color:var(--linha)}
+html[data-theme="light"] .list-li{border-bottom-color:var(--linha)}
+html[data-theme="light"] .maplegend{color:#4c5876}
+html[data-theme="light"] .mapdot text{fill:#22315f}
+html[data-theme="light"] .badge-live{color:#e50012}
+html[data-theme="light"] .login-hint code{background:#eef1f8;color:#22315f}
+
+/* portal público claro tbm */
+html[data-theme="light"] .crumb{color:#8a94b3}

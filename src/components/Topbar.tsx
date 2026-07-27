@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Ic } from './icons';
+import { ThemeToggle } from './ThemeToggle';
 
 const TITLES: Record<string, [string, string]> = {
   '/': ['Comando', 'Visão Geral'],
@@ -84,6 +85,7 @@ export function Topbar({ userName, roleLabel }: { userName: string; roleLabel: s
         <b suppressHydrationWarning>{now ? now.toLocaleTimeString('pt-BR') : '--:--:--'}</b>
         <span suppressHydrationWarning>{now ? now.toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' }) : ''}</span>
       </div>
+      <ThemeToggle />
       <div className="bell" title="Alertas recentes" style={{ cursor: 'pointer' }} onClick={() => router.push('/alertas')} data-testid="bell">
         <Ic name="bell" />
       </div>
