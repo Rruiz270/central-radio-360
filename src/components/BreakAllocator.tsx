@@ -4,10 +4,12 @@ import { useState, useRef } from 'react';
 import { useToast } from './Toast';
 
 type Spot = { id: number; advertiser: string; duration_sec: number; break_id: number | null };
-type Brk = { id: number; hour: number; limit_sec: number };
+type Brk = { id: number; hour: number; limit_sec: number; program?: string | null };
 
 /* Coração operacional: alocação de spots nos breaks com minutagem ANATEL ao vivo */
-export function BreakAllocator({ spots: initial, breaks }: { spots: Spot[]; breaks: Brk[] }) {
+export function BreakAllocator({ spots: initial, breaks, recommended, recommendedReason }: {
+  spots: Spot[]; breaks: Brk[]; recommended?: number; recommendedReason?: string;
+}) {
   const toast = useToast();
   const [spots, setSpots] = useState(initial);
   const dragId = useRef<number | null>(null);
@@ -32,8 +34,7 @@ export function BreakAllocator({ spots: initial, breaks }: { spots: Spot[]; brea
     if (target == null) toast('Spot devolvido ao pool.', 'ok');
     else {
       const b = breaks.find((x) => x.id === target)!;
-      const u = used(target) + 0;
-      toast(`Alocado no break ${String(b.hour).padStart(2, '0')}h — cai na grade e no log automaticamente.`, u > b.limit_sec ? 'warn' : 'ok');
+      toast(`Alocado em ${b.program || 'break'} (${String(b.hour).padStart(2, '0')}h) — grade, log e pendência atualizados.`, 'ok');
     }
   }
 
@@ -77,9 +78,15 @@ export function BreakAllocator({ spots: initial, breaks }: { spots: Spot[]; brea
         const overq = u > b.limit_sec;
         const full = !overq && u >= b.limit_sec * 0.85;
         return (
-          <div key={b.id} className={`brk ${overq ? 'overq' : full ? 'full' : ''} ${over === b.id ? 'over' : ''}`}>
+          <div key={b.id} className={`brk ${overq ? 'overq' : full ? 'full' : ''} ${over === b.id ? 'over' : ''}`}
+            style={recommended === b.id ? { borderColor: 'var(--mblue-l)', boxShadow: '0 0 0 2px rgba(36,71,255,.18)' } : undefined}>
             <div className="bh">
-              <b className="disp">{String(b.hour).padStart(2, '0')}h</b>
+              <b className="disp" style={{ minWidth: 190 }}>
+                {String(b.hour).padStart(2, '0')}h · {b.program || 'Break'}
+              </b>
+              {recommended === b.id && (
+                <span className="aitag" title={recommendedReason}>IA recomenda</span>
+              )}
               <div className="meter"><i style={{ width: `${pct}%` }} /></div>
               <span className="used">{fmt(u)} / {fmt(b.limit_sec)}</span>
             </div>

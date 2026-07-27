@@ -30,5 +30,19 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     WHERE id = ${Number(id)} AND tenant_id = ${session.tenantId}
     RETURNING *`;
   if (!rows[0]) return NextResponse.json({ error: 'não encontrado' }, { status: 404 });
+
+  /* Spot saiu do pool → entrou na grade: baixa a pendência "Agendar veiculação" e registra onde entrou */
+  if (break_id != null) {
+    const [b] = await sql`SELECT hour, program FROM breaks WHERE id = ${break_id}`;
+    await sql`
+      UPDATE internal_tasks SET done = TRUE
+      WHERE tenant_id = ${session.tenantId} AND NOT done
+        AND title LIKE ${'Agendar veiculação — ' + rows[0].advertiser + '%'}`;
+    await sql`
+      INSERT INTO alert_log (tenant_id, title, wa_group, status)
+      VALUES (${session.tenantId},
+              ${`Spot ${rows[0].advertiser} alocado: ${b?.program || 'break'} (${String(b?.hour).padStart(2, '0')}h)`},
+              'Tráfego', 'simulado')`;
+  }
   return NextResponse.json({ ok: true, spot: rows[0] });
 }

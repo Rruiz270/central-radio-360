@@ -16,7 +16,7 @@ export default async function ComercialPage() {
   const [deals, spots, breaks, prods, rates, orders] = await Promise.all([
     sql`SELECT id, advertiser, descr, value::text, stage, seller, created_at::text FROM deals WHERE tenant_id = ${t} AND pipeline = 'radio' ORDER BY id`,
     sql`SELECT id, advertiser, duration_sec, break_id FROM spots WHERE tenant_id = ${t} ORDER BY position, id`,
-    sql`SELECT id, hour, limit_sec FROM breaks WHERE tenant_id = ${t} ORDER BY hour`,
+    sql`SELECT id, hour, limit_sec, program FROM breaks WHERE tenant_id = ${t} ORDER BY hour`,
     sql`SELECT * FROM spot_productions WHERE tenant_id = ${t} ORDER BY id`,
     sql`SELECT * FROM rate_card WHERE tenant_id = ${t} ORDER BY id`,
     sql`SELECT * FROM orders WHERE tenant_id = ${t} ORDER BY id DESC LIMIT 8`,
@@ -25,6 +25,24 @@ export default async function ComercialPage() {
   const pipelineTotal = deals.filter((d) => !['Fechado'].includes(d.stage)).reduce((a, d) => a + parseFloat(d.value), 0);
 
   const stepIdx = (s: string) => ['Pedido', 'Roteiro', 'Gravação', 'Aprovação', 'No ar'].indexOf(s);
+
+  /* IA recomenda o melhor break pro próximo spot do pool:
+     share Kantar da faixa × espaço livre, evitando break que já tem o mesmo anunciante */
+  const shareByHour = (h: number) => (h >= 6 && h < 10 ? 7.9 : h >= 10 && h < 17 ? 6.4 : h >= 17 && h < 20 ? 7.4 : h >= 20 ? 5.8 : 4.1);
+  const nextSpot = spots.find((s) => s.break_id == null);
+  let recommended: number | undefined;
+  let recommendedReason = '';
+  if (nextSpot) {
+    let best = -1;
+    for (const b of breaks) {
+      const used = spots.filter((s) => s.break_id === b.id).reduce((a, s) => a + s.duration_sec, 0);
+      const free = b.limit_sec - used;
+      const sameAdv = spots.some((s) => s.break_id === b.id && s.advertiser === nextSpot.advertiser);
+      if (free < nextSpot.duration_sec || sameAdv) continue;
+      const score = shareByHour(b.hour) * free;
+      if (score > best) { best = score; recommended = b.id; recommendedReason = `Maior audiência disponível p/ ${nextSpot.advertiser}: share ${shareByHour(b.hour)}% e ${free}s livres, sem repetir o anunciante no break`; }
+    }
+  }
 
   return (
     <section className="view on">
@@ -99,7 +117,12 @@ export default async function ComercialPage() {
                   title="Alocação de spots nos breaks"
                   right={<><span className="chip c-amber" style={{ marginLeft: 'auto' }}>ANATEL · limite 3:00/break</span><BxfExport breaks={breaks as never} spots={spots as never} /></>}
                 >
-                  <BreakAllocator spots={spots as never} breaks={breaks as never} />
+                  {recommended && (
+                    <Hint style={{ marginBottom: 12 }}>
+                      <AiTag /> <b>Próximo do pool ({nextSpot?.advertiser} {nextSpot?.duration_sec}&quot;):</b> {recommendedReason}.
+                    </Hint>
+                  )}
+                  <BreakAllocator spots={spots as never} breaks={breaks as never} recommended={recommended} recommendedReason={recommendedReason} />
                   <Hint style={{ marginTop: 6 }}>
                     O spot alocado cai automático na grade da Programação e no log de execução — <b>traffic-aware</b>, sem digitar duas vezes.
                   </Hint>
