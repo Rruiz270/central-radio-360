@@ -39,8 +39,10 @@ export async function POST(req: NextRequest) {
 
   const kind = file.type.startsWith('audio') ? 'audio' : file.type.startsWith('video') ? 'video' : 'imagem';
   const [mat] = await sql`
-    INSERT INTO materials (campaign_id, kind, title, status, note, file_id)
-    VALUES (${campaignId}, ${kind}, ${file.name}, 'aguardando', ${session ? 'enviado pela produção' : 'enviado pelo cliente'}, ${f.id})
+    INSERT INTO materials (campaign_id, kind, title, status, note, file_id, uploaded_by)
+    VALUES (${campaignId}, ${kind}, ${file.name}, 'aguardando',
+            ${session ? 'enviado pela produção · aguardando cliente' : 'enviado pelo cliente · em análise'},
+            ${f.id}, ${session?.email || 'cliente'})
     RETURNING *`;
   return NextResponse.json({ ok: true, material: mat, file_uuid: f.uuid });
 }

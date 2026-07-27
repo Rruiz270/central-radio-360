@@ -43,6 +43,14 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   if (status === 'aprovado' && before?.status !== 'aprovado') {
     const [camp] = await sql`SELECT tenant_id, advertiser, name FROM campaigns WHERE id = ${mat.campaign_id}`;
     if (camp) {
+      // Notificação a quem subiu o material: aprovação fecha o ciclo de quem produziu
+      if (mat.uploaded_by && mat.uploaded_by !== 'cliente') {
+        await sql`
+          INSERT INTO alert_log (tenant_id, title, wa_group, status)
+          VALUES (${camp.tenant_id},
+                  ${`Seu material foi aprovado pelo cliente: ${String(mat.title).slice(0, 40)} (${camp.advertiser}) → ${mat.uploaded_by}`},
+                  'Produção', 'simulado')`;
+      }
       if (mat.kind === 'audio') {
         await sql`
           INSERT INTO spots (tenant_id, break_id, advertiser, duration_sec, status, position)

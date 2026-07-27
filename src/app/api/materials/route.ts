@@ -19,8 +19,9 @@ export async function POST(req: NextRequest) {
   }
 
   const rows = await sql`
-    INSERT INTO materials (campaign_id, kind, title, status, note)
-    VALUES (${campaign_id}, ${kind || 'imagem'}, ${title}, 'aguardando', ${session ? 'enviado pela produção' : 'enviado pelo cliente'})
+    INSERT INTO materials (campaign_id, kind, title, status, note, uploaded_by)
+    VALUES (${campaign_id}, ${kind || 'imagem'}, ${title}, 'aguardando',
+            ${session ? 'enviado pela produção' : 'enviado pelo cliente'}, ${session?.email || 'cliente'})
     RETURNING *`;
   return NextResponse.json({ ok: true, material: rows[0] });
 }
