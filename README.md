@@ -34,7 +34,7 @@ npm run build && npm start   # http://localhost:3360
 | Jornalismo | jornalismo@metropolitana.fm | praça |
 | Marketing Digital | marketing@metropolitana.fm | social/rede |
 | Operações (Agência) | operacoes@metropolitana.fm | agência |
-| Gestor de Afiliada | rio@metropolitana.fm | só a praça Rio |
+| Gestor de Afiliada | rio@ · bh@ · recife@ · fortaleza@ · curitiba@ (…metropolitana.fm) | cada um só a sua praça |
 
 Portal do cliente (sem login): `/portal/cb-julho-2026`
 

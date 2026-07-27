@@ -74,7 +74,10 @@ function LoginForm() {
         <div className="login-hint">
           Perfis de demonstração (senha <code>metro360</code>):<br />
           <code>admin@metropolitana.fm</code> · <code>comercial@…</code> · <code>programacao@…</code> ·{' '}
-          <code>jornalismo@…</code> · <code>marketing@…</code> · <code>operacoes@…</code> · <code>rio@…</code>
+          <code>jornalismo@…</code> · <code>marketing@…</code> · <code>operacoes@…</code>
+          <br />
+          Afiliadas (cada uma vê só a sua praça): <code>rio@…</code> · <code>bh@…</code> · <code>recife@…</code> ·{' '}
+          <code>fortaleza@…</code> · <code>curitiba@…</code>
         </div>
       </form>
     </div>
