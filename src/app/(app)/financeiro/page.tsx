@@ -2,6 +2,7 @@ import { sql } from '@/lib/db';
 import { requireModule } from '@/lib/guard';
 import { Kpi, SecTitle, Card, Chip, Hint, BarRow, AiTag, WoTag, fmtBRL } from '@/components/ui';
 import { InvoiceEmitButtons } from '@/components/actions';
+import { DocLinks } from '@/components/esteira/DocInbox';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,6 +24,11 @@ export default async function FinanceiroPage() {
 
   return (
     <section className="view on">
+      <DocLinks items={[
+        { kind: 'PO', label: 'Pedidos de Orçamento', href: '/esteira/po', sub: 'Planilha orçamentária com assinatura de Diretoria, Financeiro, R.H. e Operações.' },
+        { kind: 'PV', label: 'Veiculação a faturar', href: '/esteira/pv', sub: 'O entregue vira fatura e volta ao PO para medir a margem real.' },
+      ]} />
+
       <div className="cards g4" style={{ marginBottom: 8 }}>
         <Kpi label="Receita (mês)" value="R$ 486k" delta="▲ 14%" deltaTone="up" />
         <Kpi label="A receber" value={fmtBRL(aReceber)} delta={`${recv.length} títulos`} tone="b2" />

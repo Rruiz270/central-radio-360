@@ -2,7 +2,7 @@ import type { Role } from './auth';
 
 /* Mapa de acesso por perfil — espelho do mockup aprovado (ACCESS) */
 export type ModuleKey =
-  | 'dash' | 'rede' | 'org' | 'concorrencia' | 'audiencia'
+  | 'dash' | 'rede' | 'org' | 'concorrencia' | 'audiencia' | 'esteira' | 'os'
   | 'prog' | 'jornalismo' | 'comercial' | 'cliente' | 'digital' | 'tecnica'
   | 'vendasag' | 'acoes' | 'planejamento' | 'estoque' | 'equipe'
   | 'marketing' | 'monetizacao'
@@ -11,12 +11,12 @@ export type ModuleKey =
 
 export const ACCESS: Record<Role, ModuleKey[] | 'all'> = {
   admin: 'all',
-  comercial: ['dash', 'rede', 'concorrencia', 'audiencia', 'comercial', 'cliente', 'vendasag', 'financeiro', 'alertas', 'ia'],
-  programacao: ['dash', 'audiencia', 'prog', 'ia', 'alertas'],
-  jornalismo: ['dash', 'audiencia', 'jornalismo', 'ia', 'alertas'],
-  marketing: ['dash', 'concorrencia', 'audiencia', 'marketing', 'monetizacao', 'digital', 'cliente', 'alertas'],
-  operacoes: ['dash', 'audiencia', 'vendasag', 'acoes', 'planejamento', 'estoque', 'equipe', 'alertas'],
-  afiliada: ['dash', 'audiencia', 'prog', 'jornalismo', 'comercial', 'alertas'],
+  comercial: ['os', 'dash', 'rede', 'concorrencia', 'audiencia', 'esteira', 'comercial', 'cliente', 'vendasag', 'financeiro', 'alertas', 'ia'],
+  programacao: ['os', 'dash', 'audiencia', 'esteira', 'prog', 'ia', 'alertas'],
+  jornalismo: ['os', 'dash', 'audiencia', 'esteira', 'jornalismo', 'ia', 'alertas'],
+  marketing: ['os', 'dash', 'concorrencia', 'audiencia', 'esteira', 'marketing', 'monetizacao', 'digital', 'cliente', 'alertas'],
+  operacoes: ['os', 'dash', 'audiencia', 'esteira', 'vendasag', 'acoes', 'planejamento', 'estoque', 'equipe', 'financeiro', 'alertas'],
+  afiliada: ['os', 'dash', 'audiencia', 'esteira', 'prog', 'jornalismo', 'comercial', 'alertas'],
   cliente: [],
 };
 
@@ -25,7 +25,7 @@ export function canAccess(role: Role, mod: ModuleKey): boolean {
   return a === 'all' || a.includes(mod);
 }
 
-export const NAV: { grp: string; cls: string; items: { key: ModuleKey; href: string; label: string; pill?: string }[] }[] = [
+export const NAV: { grp: string; cls: string; items: { key: ModuleKey; href: string; label: string; pill?: string; icon?: string; exact?: boolean }[] }[] = [
   {
     grp: 'Comando', cls: '',
     items: [
@@ -33,6 +33,8 @@ export const NAV: { grp: string; cls: string; items: { key: ModuleKey; href: str
       { key: 'rede', href: '/rede', label: 'Rede & Afiliadas', pill: '6' },
       { key: 'concorrencia', href: '/concorrencia', label: 'Concorrência', pill: 'novo' },
       { key: 'audiencia', href: '/audiencia', label: 'Audiência (fontes)', pill: 'novo' },
+      { key: 'esteira', href: '/esteira', label: 'Esteira de Documentos', pill: 'novo', exact: true },
+      { key: 'os', href: '/esteira/os', label: 'O.S. · Ordens de Serviço', icon: 'os' },
       { key: 'org', href: '/organograma', label: 'Organograma & Acessos' },
     ],
   },
@@ -42,6 +44,10 @@ export const NAV: { grp: string; cls: string; items: { key: ModuleKey; href: str
       { key: 'prog', href: '/programacao', label: 'Programação & Musical', pill: 'no ar' },
       { key: 'jornalismo', href: '/jornalismo', label: 'Jornalismo & Radar' },
       { key: 'comercial', href: '/comercial', label: 'Comercial & Vendas' },
+      { key: 'comercial', href: '/esteira/pi', label: 'P.I. · Pedidos de Inserção', icon: 'pi' },
+      { key: 'comercial', href: '/esteira/pd', label: 'P.D. · Distribuição', icon: 'pd' },
+      { key: 'comercial', href: '/esteira/cp', label: 'C.P. · Produção', icon: 'cp' },
+      { key: 'comercial', href: '/esteira/pv', label: 'P.V. · Veiculação', icon: 'pv' },
       { key: 'cliente', href: '/portal-cliente', label: 'Portal do Cliente', pill: 'novo' },
       { key: 'digital', href: '/digital', label: 'Digital & Podcast' },
       { key: 'tecnica', href: '/tecnica', label: 'Técnica & Engenharia' },
@@ -76,6 +82,7 @@ export const NAV: { grp: string; cls: string; items: { key: ModuleKey; href: str
     items: [
       { key: 'casa', href: '/gestao-interna', label: 'Gestão Interna' },
       { key: 'financeiro', href: '/financeiro', label: 'Financeiro' },
+      { key: 'financeiro', href: '/esteira/po', label: 'P.O. · Orçamentos', icon: 'po' },
       { key: 'config', href: '/configuracoes', label: 'Configurações & Integrações' },
     ],
   },

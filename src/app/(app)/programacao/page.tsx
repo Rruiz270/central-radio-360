@@ -7,6 +7,7 @@ import { GradeHeatmap } from '@/components/GradeHeatmap';
 import { SongForm } from '@/components/SongForm';
 import { MetasIA } from '@/components/MetasIA';
 import { QuickAdd } from '@/components/QuickAdd';
+import { OsInbox } from '@/components/esteira/DocInbox';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +22,9 @@ export default async function ProgPage() {
 
   return (
     <section className="view on">
+      <OsInbox session={session} depts={['artistico', 'chupim']}
+               title="O.S. da Programação — Artístico e Chupim" />
+
       <Player
         title={now ? `${now.artist} — ${now.title} · Categoria ${now.category?.toUpperCase()}` : 'Sem execução registrada'}
         sub="00:20 / 04:12"

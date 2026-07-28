@@ -48,7 +48,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <div key={g.grp}>
                 <div className={`grp ${g.cls}`}>{g.grp}</div>
                 {g.items.map((it) => (
-                  <NavLink key={it.key} href={it.href} icon={it.key} label={it.label} pill={it.pill} />
+                  <NavLink key={it.href} href={it.href} icon={it.icon || it.key} label={it.label} pill={it.pill} exact={it.exact} />
                 ))}
               </div>
             ))}

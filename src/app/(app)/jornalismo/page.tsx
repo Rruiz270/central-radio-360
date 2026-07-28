@@ -4,6 +4,7 @@ import { Kpi, Card, Chip, Hint, ListLi, AiTag } from '@/components/ui';
 import { Tabs } from '@/components/Tabs';
 import { RadarSend } from '@/components/RadarSend';
 import { QuickAdd } from '@/components/QuickAdd';
+import { OsInbox } from '@/components/esteira/DocInbox';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,6 +19,8 @@ export default async function JornalismoPage() {
 
   return (
     <section className="view on">
+      <OsInbox session={session} depts={['cobertura']} title="O.S. de Cobertura" />
+
       <Tabs
         tabs={[
           {

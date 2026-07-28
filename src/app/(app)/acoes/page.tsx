@@ -1,6 +1,7 @@
 import { sql } from '@/lib/db';
 import { requireModule } from '@/lib/guard';
 import { SecTitle, Card, Chip, Hint, Bar } from '@/components/ui';
+import { OsInbox, DocLinks } from '@/components/esteira/DocInbox';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,6 +15,15 @@ export default async function AcoesPage() {
 
   return (
     <section className="view on">
+      <DocLinks items={[
+        { kind: 'OS', label: 'O.S. de Operações', href: '/esteira/os?dept=operacoes', sub: 'Ficha de ação em campo: data, local, mecânica, equipe, brindes.' },
+        { kind: 'OS', label: 'O.S. de Promoção', href: '/esteira/os?dept=promocao', sub: 'Sorteios, praça de entrega e mecânica da promoção.' },
+        { kind: 'PD', label: 'Distribuição', href: '/esteira/pd', sub: 'De onde vem o saldo comprado de cada ação.' },
+        { kind: 'PO', label: 'Orçamentos', href: '/esteira/po', sub: 'Custo de fornecedor da ação, com assinatura de Operações.' },
+      ]} />
+      <OsInbox session={session} depts={['operacoes', 'promocao']}
+               title="O.S. da agência off-line — Operações e Promoção" />
+
       <Hint style={{ marginBottom: 16 }}>
         <b>Da venda à execução:</b> o vendedor personaliza a ação (chamadas, cidade, equipe) e a operação recebe a ficha
         pronta — carro, caixas de som, com/sem FM, pendrive. Nada se perde no caminho.

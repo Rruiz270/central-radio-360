@@ -1,10 +1,13 @@
 import { requireModule } from '@/lib/guard';
 import { Kpi, Card, Chip, Hint, BarRow } from '@/components/ui';
+import { OsInbox } from '@/components/esteira/DocInbox';
 
 export default async function DigitalPage() {
-  await requireModule('digital');
+  const session = await requireModule('digital');
   return (
     <section className="view on">
+      <OsInbox session={session} depts={['internet']} title="O.S. de Internet — redes e digital" />
+
       <div className="cards g4" style={{ marginBottom: 8 }}>
         <Kpi label="Ouvintes streaming" value="8.4k" delta="▲ 12%" deltaTone="up" />
         <Kpi label="Seguidores (redes)" value="312k" delta="▲ 3.1k" deltaTone="up" tone="b2" />
