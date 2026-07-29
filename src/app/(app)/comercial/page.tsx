@@ -50,7 +50,7 @@ export default async function ComercialPage() {
       <DocLinks items={[
         { kind: 'PI', label: 'Pedidos de Inserção', href: '/esteira/pi', sub: 'O número que amarra a esteira. Desmembra rádio e agência.' },
         { kind: 'PD', label: 'Distribuição', href: '/esteira/pd', sub: 'Reparte a P.I. entre as praças da rede e os departamentos.' },
-        { kind: 'CP', label: 'Produção de peças', href: '/esteira/cp', sub: 'Roteiro, gravação e aprovação do cliente pelo Portal.' },
+        { kind: 'CP', label: 'Produção de peças', href: '/esteira/pecas', sub: 'Roteiro, gravação e aprovação do cliente pelo Portal.' },
         { kind: 'PV', label: 'Veiculação', href: '/esteira/pv', sub: 'Autoriza o ar e comprova a entrega praça a praça.' },
       ]} />
 

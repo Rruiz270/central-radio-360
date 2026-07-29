@@ -26,6 +26,7 @@ export default async function FinanceiroPage() {
     <section className="view on">
       <DocLinks items={[
         { kind: 'PO', label: 'Pedidos de Orçamento', href: '/esteira/po', sub: 'Planilha orçamentária com assinatura de Diretoria, Financeiro, R.H. e Operações.' },
+        { kind: 'CP', label: 'Custo de Produção', href: '/esteira/cp', sub: 'A planilha do PO fechada com o gasto real — a margem verdadeira do job.' },
         { kind: 'PV', label: 'Veiculação a faturar', href: '/esteira/pv', sub: 'O entregue vira fatura e volta ao PO para medir a margem real.' },
       ]} />
 

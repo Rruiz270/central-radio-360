@@ -33,7 +33,7 @@ export default async function PVPage({ params }: { params: Promise<{ id: string 
         <Chain step={6} links={{
           PO: `/esteira/po/${pi.po_id}`, PI: `/esteira/pi/${pi.id}`,
           ...(pd ? { PD: `/esteira/pd/${pd.id}` } : {}),
-          OS: `/esteira/os?pi=${pi.id}`, CP: `/esteira/cp?pi=${pi.id}`, PV: `/esteira/pv/${pvId}`,
+          OS: `/esteira/os?pi=${pi.id}`, CP: `/esteira/pecas?pi=${pi.id}`, PV: `/esteira/pv/${pvId}`,
         }} />
       </div>
 

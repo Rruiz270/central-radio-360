@@ -105,9 +105,9 @@ export function OsEditor({
     const data = await res.json().catch(() => ({}));
     setBusy(false);
     if (!res.ok) { toast(data.error || 'Falha ao abrir produção.', 'warn'); return; }
-    if (!data.total) { toast('As peças desta O.S. já estão em produção.', 'warn'); router.push('/esteira/cp'); return; }
+    if (!data.total) { toast('As peças desta O.S. já estão em produção.', 'warn'); router.push('/esteira/pecas'); return; }
     toast(`${data.total} peça(s) entraram em produção.`, 'ok');
-    router.push('/esteira/cp');
+    router.push('/esteira/pecas');
   }
 
   const dias = daysInMonth(mes, year);

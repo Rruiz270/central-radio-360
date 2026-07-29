@@ -37,7 +37,7 @@ export default async function PIPage({ params }: { params: Promise<{ id: string 
           PI: `/esteira/pi/${piId}`,
           ...(pd ? { PD: `/esteira/pd/${pd.id}` } : {}),
           ...(cnt.os ? { OS: `/esteira/os?pi=${piId}` } : {}),
-          ...(cnt.cp ? { CP: `/esteira/cp?pi=${piId}` } : {}),
+          ...(cnt.cp ? { CP: `/esteira/pecas?pi=${piId}` } : {}),
           ...(pv ? { PV: `/esteira/pv/${pv.id}` } : {}),
         }} />
       </div>

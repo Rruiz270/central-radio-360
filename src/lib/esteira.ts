@@ -13,15 +13,15 @@ export const DOC: Record<DocKind, {
   module: string; where: string;
 }> = {
   PO: { name: 'PO', full: 'Pedido de Orçamento', tone: 'po', href: '/esteira/po',
-        module: 'financeiro', where: 'Financeiro · aprovação em 4 áreas' },
+        module: 'financeiro', where: 'Financeiro · planilha por rubricas + 4 assinaturas' },
   PI: { name: 'PI', full: 'Pedido de Inserção', tone: 'pi', href: '/esteira/pi',
         module: 'comercial', where: 'Comercial & Vendas' },
   PD: { name: 'PD', full: 'Planilha de Distribuição', tone: 'pd', href: '/esteira/pd',
         module: 'comercial', where: 'Comercial · rede nacional' },
   OS: { name: 'OS', full: 'Ordem de Serviço', tone: 'os', href: '/esteira/os',
         module: 'acoes', where: 'cada departamento recebe a sua' },
-  CP: { name: 'CP', full: 'Controle de Produção', tone: 'cp', href: '/esteira/cp',
-        module: 'comercial', where: 'Produção de Spot + Portal do Cliente' },
+  CP: { name: 'CP', full: 'Custo de Produção', tone: 'cp', href: '/esteira/cp',
+        module: 'financeiro', where: 'Financeiro · fecha o custo real do job' },
   PV: { name: 'PV', full: 'Pedido de Veiculação', tone: 'pv', href: '/esteira/pv',
         module: 'comercial', where: 'Comercial (tráfego) + Financeiro' },
 };
@@ -141,6 +141,76 @@ export const OS_BALANCES: Record<Dept, { label: string; unit: string; key: strin
   ],
   cobertura: [{ label: 'Dias de cobertura', unit: 'dias', key: 'dias' }],
 };
+
+/* ===================== planilha orçamentária (PO / CP) ===================== */
+/* Rubricas e colunas vêm do modelo PROMOONE (PO_Cliente / CP_Cliente).
+   PO = orçado, enviado ao cliente. CP = a mesma planilha fechada com o custo realizado. */
+
+export type Rubrica = 'criacao' | 'espaco' | 'cenografia' | 'tecnica' | 'operacao' | 'equipe' | 'taxas';
+
+export const RUBRICAS: { key: Rubrica; n: number; label: string }[] = [
+  { key: 'criacao',    n: 1, label: 'Criação e Planejamento' },
+  { key: 'espaco',     n: 2, label: 'Espaço' },
+  { key: 'cenografia', n: 3, label: 'Cenografia' },
+  { key: 'tecnica',    n: 4, label: 'Técnica' },
+  { key: 'operacao',   n: 5, label: 'Operação' },
+  { key: 'equipe',     n: 6, label: 'Equipe' },
+  { key: 'taxas',      n: 7, label: 'Taxas e Seguros' },
+];
+export const rubricaLabel = (k: string) => RUBRICAS.find((r) => r.key === k)?.label ?? k;
+
+/* Percentuais padrão do modelo. */
+export const FEE_PCT = 0.10;       // honorários
+export const CHARGES_PCT = 0.17;   // encargos
+export const PLANNING_PCT = 0.05;  // planejamento + criação
+
+export type SheetLine = {
+  rubrica: string; item: string; direct_pay: boolean;
+  unit_price: number | string; qty: number | string; period: number | string;
+  margin: number | string; markup: number | string;
+  client_unit: number | string; client_qty: number | string; client_period: number | string;
+};
+
+/* Uma linha da planilha: custo interno de um lado, faturamento ao cliente do outro. */
+export function lineTotals(l: SheetLine, feePct: number, chargesPct: number) {
+  const cost = num(l.unit_price) * num(l.qty) * num(l.period);        // custo total PROMOONE
+  const markup = cost * num(l.markup);                                // mark up sobre o custo
+  const clientCost = num(l.client_unit) * num(l.client_qty) * num(l.client_period);
+  const fee = l.direct_pay ? clientCost * feePct : 0;                 // honorários só no pagto. direto
+  const charges = clientCost * chargesPct;
+  return { cost, markup, clientCost, fee, charges, billed: clientCost + fee + charges };
+}
+
+/* Resumo do cabeçalho da planilha (bloco RESUMO do Excel). */
+export function sheetSummary(lines: SheetLine[], feePct = FEE_PCT, chargesPct = CHARGES_PCT, planningPct = PLANNING_PCT) {
+  let thirdParty = 0, own = 0, planning = 0, fee = 0, charges = 0, cost = 0, markup = 0;
+  for (const l of lines) {
+    const t = lineTotals(l, feePct, chargesPct);
+    cost += t.cost; markup += t.markup; fee += t.fee; charges += t.charges;
+    if (l.rubrica === 'criacao') planning += t.clientCost;
+    else if (l.direct_pay) thirdParty += t.clientCost;
+    else own += t.clientCost;
+  }
+  if (planning === 0) planning = (thirdParty + own) * planningPct;
+  const billedOwn = own + planning + fee + charges + markup;
+  const total = billedOwn + thirdParty;
+  const agencyRevenue = fee + markup + planning;
+  return {
+    thirdParty, own, planning, fee, charges, markup, cost,
+    billedOwn, billedThirdParty: thirdParty, total,
+    agencyRevenue,
+    profitability: total > 0 ? agencyRevenue / total : 0,
+  };
+}
+
+/* Cláusulas fixas do rodapé do modelo. */
+export const CLAUSULAS = [
+  'Os direitos autorais deste projeto pertencem à PROMOONE e serão remunerados pelos honorários que constam nesta planilha.',
+  'Prazos de pagamento (fornecedores e PROMOONE) e produção de materiais serão negociados na aprovação do projeto.',
+  'Os custos de criação e editoração incluem até 3 (três) refações. A partir da 4ª refação, se esta ocorrer por responsabilidade ou vontade do cliente, será cobrada taxa de 50% dos custos referentes à criação e/ou editoração dos lay outs refeitos.',
+  'Eventuais extras serão cobrados conforme necessidade.',
+  'Os valores contemplados nesse orçamento têm validade e prazo de execução de 6 meses após aprovação. Para prazos que extrapolem esse período os valores serão reajustados.',
+];
 
 /* ===================== permissões por documento ===================== */
 

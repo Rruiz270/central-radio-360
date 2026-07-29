@@ -51,7 +51,7 @@ export default async function OSPage({ params }: { params: Promise<{ id: string 
         <Chain step={step} links={{
           PO: `/esteira/po/${pi.po_id}`, PI: `/esteira/pi/${pi.id}`, PD: `/esteira/pd/${os.pd_id}`,
           OS: `/esteira/os?pd=${os.pd_id}`,
-          ...(cp.n ? { CP: `/esteira/cp?pi=${pi.id}` } : {}),
+          ...(cp.n ? { CP: `/esteira/pecas?pi=${pi.id}` } : {}),
           ...(pv ? { PV: `/esteira/pv/${pv.id}` } : {}),
         }} />
       </div>

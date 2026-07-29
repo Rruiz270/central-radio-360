@@ -12,17 +12,19 @@ export default async function POListPage() {
   const rows = await sql`
     SELECT po.*,
       (SELECT count(*)::int FROM po_approvals a WHERE a.po_id = po.id AND NOT a.approved) AS pend,
-      (SELECT COALESCE(sum(i.qty * i.unit_price),0) FROM po_items i WHERE i.po_id = po.id) AS custo,
+      (SELECT COALESCE(sum(i.qty * i.period * i.unit_price),0) FROM po_items i WHERE i.po_id = po.id) AS custo,
+      (SELECT cp.id FROM purchase_orders cp WHERE cp.source_po_id = po.id AND cp.kind = 'CP') AS cp_id,
       (SELECT pi.code FROM insertion_orders pi WHERE pi.po_id = po.id) AS pi_code,
       (SELECT pi.id FROM insertion_orders pi WHERE pi.po_id = po.id) AS pi_id
-    FROM purchase_orders po ORDER BY po.id DESC`;
+    FROM purchase_orders po WHERE po.kind = 'PO' ORDER BY po.id DESC`;
 
   return (
     <section className="view on">
       <Hint style={{ marginBottom: 16 }}>
-        <b>Pedido de Orçamento</b> é o primeiro documento da esteira e mora no <b>Financeiro</b>: é onde o custo da
-        entrega é orçado com fornecedor e assinado por Diretoria, Financeiro, R.H. e Operações. Sem as quatro
-        assinaturas, a P.I. não sai.
+        <b>Pedido de Orçamento</b> é o primeiro documento da esteira e mora no <b>Financeiro</b>. Segue o modelo
+        PROMOONE: rubricas (Criação, Espaço, Cenografia, Técnica, Operação, Equipe, Taxas), custo interno de um
+        lado e faturamento ao cliente do outro, com honorários, encargos e mark up. Sem as quatro assinaturas —
+        Diretoria, Financeiro, R.H. e Operações — a P.I. não sai.
       </Hint>
       <SecTitle right={<NovoPO />}>Orçamentos</SecTitle>
       <div className="card"><div className="bd" style={{ padding: 0 }}>
@@ -31,11 +33,11 @@ export default async function POListPage() {
             <thead><tr>
               <th>Código</th><th>Cliente</th><th>Prospecção</th><th>Período</th>
               <th className="num">Receita</th><th className="num">Custo</th><th className="num">Margem</th>
-              <th>Assinaturas</th><th>P.I.</th>
+              <th>Assinaturas</th><th>P.I.</th><th>C.P.</th>
             </tr></thead>
             <tbody>
               {rows.length === 0 && (
-                <tr><td colSpan={9} className="muted" style={{ padding: 22, textAlign: 'center' }}>
+                <tr><td colSpan={10} className="muted" style={{ padding: 22, textAlign: 'center' }}>
                   Nenhum orçamento aberto ainda.
                 </td></tr>
               )}
@@ -57,6 +59,9 @@ export default async function POListPage() {
                     <td>{p.pi_id
                       ? <Link href={`/esteira/pi/${p.pi_id}`} className="chip c-blue">{p.pi_code}</Link>
                       : <span className="muted tiny">—</span>}</td>
+                    <td>{p.cp_id
+                      ? <Link href={`/esteira/po/${p.cp_id}`} className="chip c-amber">fechado</Link>
+                      : <span className="muted tiny">a fechar</span>}</td>
                   </tr>
                 );
               })}

@@ -1,72 +1,86 @@
-import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { sql } from '@/lib/db';
-import { getSession } from '@/lib/auth';
+import { requireModule } from '@/lib/guard';
 import { Hint, SecTitle, Kpi } from '@/components/ui';
-import { CpBoard, type Cp } from '@/components/esteira/CpBoard';
-import { canCreate } from '@/lib/esteira';
+import { brlShort, num } from '@/lib/esteira';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CPPage({ searchParams }: { searchParams: Promise<{ pi?: string }> }) {
-  const session = await getSession();
-  if (!session) redirect('/login');
-  const sp = await searchParams;
-  const afiliada = session.role === 'afiliada';
+/* C.P. — Custo de Produção. A mesma planilha do PO, fechada com o gasto real. */
+export default async function CPListPage() {
+  await requireModule('financeiro');
 
-  const rows = (await sql`
-    SELECT p.*, p.due::text AS due, o.code AS os_code, o.id AS os_id,
-           pi.code AS pi_code, pi.id AS pi_id, t.name AS praca
-    FROM productions p
-    LEFT JOIN service_orders o ON o.id = p.os_id
-    JOIN insertion_orders pi ON pi.id = p.pi_id
-    JOIN tenants t ON t.id = p.tenant_id
-    WHERE TRUE
-      ${sp.pi ? sql`AND p.pi_id = ${Number(sp.pi)}` : sql``}
-      ${afiliada ? sql`AND p.tenant_id = ${session.tenantId}` : sql``}
-    ORDER BY p.step, p.id DESC`) as unknown as Cp[];
+  const rows = await sql`
+    SELECT cp.*, po.code AS po_code, po.id AS po_id,
+      (SELECT COALESCE(sum(qty*period*unit_price),0) FROM po_items WHERE po_id = cp.id) AS custo,
+      (SELECT COALESCE(sum(qty*period*unit_price),0) FROM po_items WHERE po_id = cp.source_po_id) AS orcado,
+      (SELECT COALESCE(sum(client_unit*client_qty*client_period),0) FROM po_items WHERE po_id = cp.id) AS faturado
+    FROM purchase_orders cp
+    LEFT JOIN purchase_orders po ON po.id = cp.source_po_id
+    WHERE cp.kind = 'CP' ORDER BY cp.id DESC`;
 
-  /* Campanhas com produção aberta — e quantas peças ainda travam a veiculação. */
-  const piAll = (await sql`
-    SELECT pi.id, pi.code, pi.client,
-      (SELECT count(*)::int FROM productions x WHERE x.pi_id = pi.id AND x.client_status <> 'aprovado') AS pend
-    FROM insertion_orders pi
-    WHERE EXISTS (SELECT 1 FROM productions x WHERE x.pi_id = pi.id)
-      AND NOT EXISTS (SELECT 1 FROM airing_orders v WHERE v.pi_id = pi.id)
-    ORDER BY pi.id DESC`) as unknown as { id: number; code: string; client: string; pend: number }[];
-
-  const noAr = rows.filter((r) => r.step === 5).length;
-  const aguardando = rows.filter((r) => r.client_status === 'aguardando').length;
-  const ajuste = rows.filter((r) => r.client_status === 'ajuste').length;
+  const custo = rows.reduce((a, r) => a + num(r.custo), 0);
+  const orcado = rows.reduce((a, r) => a + num(r.orcado), 0);
+  const desvio = orcado ? (custo - orcado) / orcado : 0;
 
   return (
     <section className="view on">
       <Hint style={{ marginBottom: 16 }}>
-        O <b>CP</b> é a ponte entre a O.S. e o ar: roteiro, gravação, aprovação do cliente e liberação.
-        A aprovação usa o <b>Portal do Cliente</b> que já existe — sem criar um segundo canal.
+        <b>C.P. — Custo de Produção.</b> É a mesma planilha do orçamento, agora com o que foi de fato gasto:
+        rubrica a rubrica, com honorários, encargos e mark up. A diferença entre o CP e o PO é a margem real do
+        job. Não confundir com <Link href="/esteira/pecas" style={{ color: '#8fa8ff' }}>Produção de peças</Link>,
+        que é roteiro e gravação.
       </Hint>
 
       <div className="cards g4" style={{ marginBottom: 16 }}>
-        <Kpi label="Peças em produção" value={String(rows.length - noAr)} />
-        <Kpi label="Liberadas para o ar" value={String(noAr)} tone="b2" deltaTone="up" delta="aprovadas pelo cliente" />
-        <Kpi label="Aguardando cliente" value={String(aguardando)} tone="y" delta="travam a veiculação" />
-        <Kpi label="Em ajuste" value={String(ajuste)} tone="r" delta="cliente pediu mudança" deltaTone={ajuste ? 'down' : 'flat'} />
+        <Kpi label="Jobs fechados" value={String(rows.length)} />
+        <Kpi label="Custo realizado" value={brlShort(custo)} tone="r" />
+        <Kpi label="Custo orçado" value={brlShort(orcado)} tone="y" />
+        <Kpi label="Desvio" value={orcado ? `${(desvio * 100).toFixed(1)}%` : '—'} tone="b2"
+             delta={desvio <= 0 ? 'abaixo do orçado' : 'acima do orçado'} deltaTone={desvio <= 0 ? 'up' : 'down'} />
       </div>
 
-      <SecTitle>Controle de Produção</SecTitle>
-      <CpBoard initial={rows} canEdit={canCreate(session.role, 'CP')} piAll={piAll} />
-
-      <SecTitle>Fluxo de uma peça</SecTitle>
-      <div className="steps">
-        {['Briefing recebido', 'Roteiro', 'Gravação / locução', 'Aprovação do cliente', 'Liberada para o ar'].map((s, i) => (
-          <span key={s} style={{ display: 'contents' }}>
-            <div className="step"><span className="n">{i + 1}</span> {s}</div>
-            {i < 4 && <span className="arrow">→</span>}
-          </span>
-        ))}
-      </div>
-      <div className="nota">
-        Peça sem aprovação do cliente não vai para o ar — a trava está na API, não só na tela.
-      </div>
+      <SecTitle>Custos de Produção</SecTitle>
+      <div className="card"><div className="bd" style={{ padding: 0 }}>
+        <div className="sheet" style={{ border: 0, borderRadius: 16 }}>
+          <table>
+            <thead><tr>
+              <th>Código</th><th>Orçamento</th><th>Cliente</th><th>Projeto</th><th>Evento</th>
+              <th className="num">Orçado</th><th className="num">Realizado</th><th className="num">Desvio</th>
+              <th className="num">Faturado</th><th>Status</th>
+            </tr></thead>
+            <tbody>
+              {rows.length === 0 && (
+                <tr><td colSpan={10} className="muted" style={{ padding: 22, textAlign: 'center' }}>
+                  Nenhum custo fechado. O CP nasce de um <b>PO aprovado</b>, copiando a planilha inteira.
+                </td></tr>
+              )}
+              {rows.map((c) => {
+                const o = num(c.orcado), r = num(c.custo);
+                const d = o ? (r - o) / o : 0;
+                return (
+                  <tr key={c.id}>
+                    <td><Link href={`/esteira/po/${c.id}`} className="b" style={{ color: '#8fa8ff' }}>{c.code}</Link></td>
+                    <td>{c.po_id
+                      ? <Link href={`/esteira/po/${c.po_id}`} className="chip c-blue">{c.po_code}</Link>
+                      : <span className="muted tiny">—</span>}</td>
+                    <td className="b">{c.client}</td>
+                    <td className="tiny muted">{c.project || '—'}</td>
+                    <td className="tiny">{c.event_place || '—'}</td>
+                    <td className="num">{o ? brlShort(o) : '—'}</td>
+                    <td className="num b">{r ? brlShort(r) : '—'}</td>
+                    <td className="num">{o
+                      ? <span className={`chip c-${d <= 0 ? 'green' : d < 0.1 ? 'amber' : 'red'}`}>{(d * 100).toFixed(1)}%</span>
+                      : '—'}</td>
+                    <td className="num">{brlShort(c.faturado)}</td>
+                    <td><span className={`chip c-${c.status === 'fechada' ? 'green' : 'amber'}`}>{c.status}</span></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div></div>
     </section>
   );
 }

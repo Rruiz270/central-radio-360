@@ -596,3 +596,59 @@ html[data-theme="light"] .brk .bh b{color:#0e1c56}
   .nota code{background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px;font-size:10.5px}
   .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:10.5px;color:var(--txt-3);align-items:center;margin-top:9px}
   .legend i{width:12px;height:12px;border-radius:3px;display:inline-block;vertical-align:-2px;margin-right:5px}
+
+  /* ---- Esteira no tema claro (o app alterna tema; sem isto o texto some) ---- */
+  html[data-theme="light"] .doc{background:#fff;border-color:var(--linha)}
+  html[data-theme="light"] .doc .dh{background:#f4f7ff;border-bottom-color:var(--linha)}
+  html[data-theme="light"] .doc .dh h3{color:#0e1c56}
+  html[data-theme="light"] .doc .df{background:#f7f9ff;border-top-color:var(--linha)}
+  html[data-theme="light"] .hg .v{color:#101733;border-bottom-color:var(--linha2)}
+  html[data-theme="light"] .hg .v.em{color:var(--txt-3)}
+  html[data-theme="light"] .hg input{color:#101733;border-bottom-color:var(--linha2)}
+
+  html[data-theme="light"] .sheet{background:#fff;border-color:var(--linha)}
+  html[data-theme="light"] .sheet th{background:#eef2fd;color:#6a76a0}
+  html[data-theme="light"] .sheet tfoot td{background:#e9eefc;color:#0e1c56;border-top-color:var(--linha2)}
+  html[data-theme="light"] .sheet tr.grp td{background:#f0f3fb;color:#0e1c56}
+  html[data-theme="light"] .ed{background:#fff;border-color:var(--linha2);color:#101733}
+
+  html[data-theme="light"] .ch{background:#fff;border-color:var(--linha2);color:#6a76a0}
+  html[data-theme="light"] .ch.done{background:#e2f6e8;border-color:#bfe8cd;color:#157f3c}
+  html[data-theme="light"] .ch.now{background:linear-gradient(135deg,#0020b8,#2447ff);border-color:transparent;color:#fff}
+  html[data-theme="light"] .ch.block{background:#fde5e7;border-color:#f6c3c8;color:#b3121f}
+
+  html[data-theme="light"] .mapa{border-color:var(--linha)}
+  html[data-theme="light"] .mapa th,html[data-theme="light"] .mapa td{border-color:var(--linha)}
+  html[data-theme="light"] .mapa th{background:#eef2fd;color:#6a76a0}
+  html[data-theme="light"] .mapa th.fds{background:#fdeef0;color:#b3121f}
+  html[data-theme="light"] .mapa .rl{background:#f7f9ff;color:#101733;border-right-color:var(--linha)}
+  html[data-theme="light"] .mapa .cel.v0{background:#fbfcff}
+  html[data-theme="light"] .mapa .cel.v1{background:#c9d6fb;color:#0e1c56}
+  html[data-theme="light"] .mapa .cel.v2{background:#5f7bff}
+  html[data-theme="light"] .mapa .cel.v3{background:#00a8e8;color:#04122b}
+  html[data-theme="light"] .mapa .cel:hover{outline-color:#0020b8}
+  html[data-theme="light"] .mapa .tot{background:#fff6c9;color:#8a6d00}
+
+  html[data-theme="light"] .sal{background:#fff;border-color:var(--linha)}
+  html[data-theme="light"] .sal .ln{color:var(--txt-2)}
+  html[data-theme="light"] .sal .ln b,html[data-theme="light"] .sal .ln.f{color:#101733}
+  html[data-theme="light"] .sal .ln.f{border-top-color:var(--linha)}
+
+  html[data-theme="light"] .ap{background:#fff;border-color:var(--linha)}
+  html[data-theme="light"] .ap.on{background:#f0fbf3;border-color:#bfe8cd}
+  html[data-theme="light"] .ap .st{color:var(--txt-2)}
+  html[data-theme="light"] .ap.on .st{color:#157f3c}
+
+  html[data-theme="light"] .acao{background:#fff;border-color:var(--linha)}
+  html[data-theme="light"] .acao .ah{background:linear-gradient(90deg,#fdeef0,transparent);border-bottom-color:var(--linha)}
+  html[data-theme="light"] .acao.ok .ah{background:linear-gradient(90deg,#e6f7ec,transparent)}
+  html[data-theme="light"] .acao .ah b{color:#101733}
+  html[data-theme="light"] .fl input,html[data-theme="light"] .fl textarea,html[data-theme="light"] .fl select{
+    background:#fff;border-color:var(--linha2);color:#101733}
+
+  html[data-theme="light"] .fm{background:#fff;border-color:var(--linha)}
+  html[data-theme="light"] .fm:hover{border-color:#5f7bff}
+  html[data-theme="light"] .fm .nm{color:#0e1c56}
+  html[data-theme="light"] .fm .qt{background:#eef2fd;border-color:var(--linha);color:#0e1c56}
+  html[data-theme="light"] .fm .qt.al{background:#fde5e7;border-color:#f6c3c8;color:#b3121f}
+  html[data-theme="light"] .nota code{background:#eef2fd;color:#22315f}

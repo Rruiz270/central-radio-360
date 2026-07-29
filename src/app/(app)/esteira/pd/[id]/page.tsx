@@ -41,7 +41,7 @@ export default async function PDPage({ params }: { params: Promise<{ id: string 
         <Chain step={step} blocked={pd.status === 'rascunho' ? 'PD aguardando autorização' : null} links={{
           PO: `/esteira/po/${pi.po_id}`, PI: `/esteira/pi/${pi.id}`, PD: `/esteira/pd/${pdId}`,
           ...(cnt.os ? { OS: `/esteira/os?pd=${pdId}` } : {}),
-          ...(cnt.cp ? { CP: `/esteira/cp?pi=${pi.id}` } : {}),
+          ...(cnt.cp ? { CP: `/esteira/pecas?pi=${pi.id}` } : {}),
           ...(pv ? { PV: `/esteira/pv/${pv.id}` } : {}),
         }} />
       </div>

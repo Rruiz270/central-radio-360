@@ -42,18 +42,19 @@ export default async function EsteiraPage() {
     LEFT JOIN insertion_orders pi ON pi.po_id = po.id
     LEFT JOIN distributions pd ON pd.pi_id = pi.id
     LEFT JOIN airing_orders pv ON pv.pi_id = pi.id
+    WHERE po.kind = 'PO'
     ${afiliada
-      ? sql`WHERE EXISTS (SELECT 1 FROM service_orders o WHERE o.pi_id = pi.id AND o.tenant_id = ${session.tenantId})`
+      ? sql`AND EXISTS (SELECT 1 FROM service_orders o WHERE o.pi_id = pi.id AND o.tenant_id = ${session.tenantId})`
       : sql``}
     ORDER BY po.id DESC` ) as unknown as Row[];
 
   const counts = await sql`
     SELECT
-      (SELECT count(*)::int FROM purchase_orders WHERE status = 'aberta') AS po,
+      (SELECT count(*)::int FROM purchase_orders WHERE kind = 'PO' AND status = 'aberta') AS po,
       (SELECT count(*)::int FROM insertion_orders) AS pi,
       (SELECT count(*)::int FROM distributions) AS pd,
       (SELECT count(*)::int FROM service_orders WHERE status <> 'concluida') AS os,
-      (SELECT count(*)::int FROM productions WHERE step < 5) AS cp,
+      (SELECT count(*)::int FROM purchase_orders WHERE kind = 'CP') AS cp,
       (SELECT count(*)::int FROM airing_orders) AS pv`;
   const c = counts[0];
 
@@ -84,7 +85,7 @@ export default async function EsteiraPage() {
     PI: 'Gera o número que amarra tudo. Já desmembra rádio e agência.',
     PD: 'Distribui por praça e departamento, com tabela, desconto e comissão.',
     OS: 'Uma por departamento. É onde a agência off-line executa.',
-    CP: 'Peça, roteiro, gravação, aprovação do cliente e liberação.',
+    CP: 'A mesma planilha do PO fechada com o gasto real — a margem verdadeira do job.',
     PV: 'Autorização de veiculação e comprovação de entrega.',
   };
 
@@ -135,7 +136,7 @@ export default async function EsteiraPage() {
                   ...(r.pi_id ? { PI: `/esteira/pi/${r.pi_id}` } : {}),
                   ...(r.pd_id ? { PD: `/esteira/pd/${r.pd_id}` } : {}),
                   ...(r.os_total ? { OS: `/esteira/os?pi=${r.pi_id}` } : {}),
-                  ...(r.cp_total ? { CP: `/esteira/cp?pi=${r.pi_id}` } : {}),
+                  ...(r.cp_total ? { CP: `/esteira/pecas?pi=${r.pi_id}` } : {}),
                   ...(r.pv_id ? { PV: `/esteira/pv/${r.pv_id}` } : {}),
                 };
                 return (
