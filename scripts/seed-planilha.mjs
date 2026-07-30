@@ -1,4 +1,4 @@
-/* Preenche o PO da campanha demo no formato PROMOONE (rubricas) e abre o CP. */
+/* Preenche o PO da campanha demo na planilha por rubricas e abre o CP. */
 import postgres from 'postgres';
 import { readFileSync } from 'fs';
 const url = process.env.DATABASE_URL || readFileSync('.env.local','utf8').match(/DATABASE_URL=(.+)/)[1].trim().replace(/^"|"$/g,'');
@@ -14,7 +14,7 @@ await sql`UPDATE purchase_orders SET project='Ativação Verão — Smirnoff', e
 
 /* rubrica, item, fornecedor, pagto direto, custo unit, qtde, período, markup, valor unit cliente */
 const L = [
-  ['criacao','Planejamento + Criação','PROMOONE',false,18000,1,1,0,22000],
+  ['criacao','Planejamento + Criação','Asa Mídia (interno)',false,18000,1,1,0,22000],
   ['espaco','Locação de área — Praia Grande','Prefeitura PG',true,4200,3,1,0.10,4620],
   ['espaco','Locação de área — Guarujá','Prefeitura Guarujá',true,3800,3,1,0.10,4180],
   ['cenografia','Tenda 3×3 personalizada','Cenotec',true,2400,4,1,0.15,2760],

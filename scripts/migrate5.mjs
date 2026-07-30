@@ -53,5 +53,5 @@ await sql`UPDATE purchase_orders SET kind = 'PO' WHERE kind IS NULL`;
 await sql`UPDATE purchase_orders SET project = prospect WHERE project IS NULL`;
 
 const [{ n }] = await sql`SELECT count(*)::int n FROM purchase_orders WHERE kind = 'PO'`;
-console.log('✓ migração 5 aplicada — planilha PROMOONE por rubricas ·', n, 'PO(s) migrado(s)');
+console.log('✓ migração 5 aplicada — planilha por rubricas ·', n, 'PO(s) migrado(s)');
 await sql.end();

@@ -5,7 +5,7 @@ import { requireModule } from '@/lib/guard';
 import { DocHead, HG, Chain } from '@/components/esteira/DocUI';
 import { PoApprovals, type PoApproval } from '@/components/esteira/PoApprovals';
 import { SheetEditor, type SheetItem } from '@/components/esteira/SheetEditor';
-import { canCreate, num } from '@/lib/esteira';
+import { canCreate, num, AGENCIA_PADRAO } from '@/lib/esteira';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,6 +27,9 @@ export default async function SheetPage({ params }: { params: Promise<{ id: stri
     ? await sql`SELECT id, code, (SELECT COALESCE(sum(qty*period*unit_price),0) FROM po_items WHERE po_id = ${po.source_po_id}) AS cost
                 FROM purchase_orders WHERE id = ${po.source_po_id}`
     : [null];
+
+  const [ag] = await sql`SELECT value FROM settings WHERE key = 'agency_name'`;
+  const agencia = (ag?.value as string) || AGENCIA_PADRAO;
 
   const pend = aps.filter((a) => !a.approved).length;
   const canEdit = canCreate(session.role, kind) && po.status === 'aberta';
@@ -50,7 +53,7 @@ export default async function SheetPage({ params }: { params: Promise<{ id: stri
           kind={kind}
           title={kind === 'CP' ? 'Custo de Produção' : 'Planilha Orçamentária — Pedido de Orçamento'}
           sub={<>
-            {po.code} · formato PROMOONE por rubricas · mora no <b>Financeiro</b>
+            {po.code} · planilha por rubricas · mora no <b>Financeiro</b>
             {origem && <> · fecha o orçamento <Link href={`/esteira/po/${origem.id}`} style={{ color: '#8fa8ff' }}>{origem.code}</Link></>}
           </>}
           right={<>
@@ -82,6 +85,7 @@ export default async function SheetPage({ params }: { params: Promise<{ id: stri
             planningPct={num(po.planning_pct) || 0.05}
             canEdit={canEdit}
             compareTo={origem ? { label: origem.code as string, total: 0, cost: num(origem.cost) } : null}
+            agencia={agencia}
           />
 
           {kind === 'PO' && (

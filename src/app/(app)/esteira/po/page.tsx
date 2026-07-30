@@ -21,10 +21,10 @@ export default async function POListPage() {
   return (
     <section className="view on">
       <Hint style={{ marginBottom: 16 }}>
-        <b>Pedido de Orçamento</b> é o primeiro documento da esteira e mora no <b>Financeiro</b>. Segue o modelo
-        PROMOONE: rubricas (Criação, Espaço, Cenografia, Técnica, Operação, Equipe, Taxas), custo interno de um
-        lado e faturamento ao cliente do outro, com honorários, encargos e mark up. Sem as quatro assinaturas —
-        Diretoria, Financeiro, R.H. e Operações — a P.I. não sai.
+        <b>Pedido de Orçamento</b> é o primeiro documento da esteira e mora no <b>Financeiro</b>. É a planilha
+        orçamentária por rubricas (Criação, Espaço, Cenografia, Técnica, Operação, Equipe, Taxas), com o custo
+        interno de um lado e o faturamento ao cliente do outro — honorários, encargos e mark up. Sem as quatro
+        assinaturas — Diretoria, Financeiro, R.H. e Operações — a P.I. não sai.
       </Hint>
       <SecTitle right={<NovoPO />}>Orçamentos</SecTitle>
       <div className="card"><div className="bd" style={{ padding: 0 }}>

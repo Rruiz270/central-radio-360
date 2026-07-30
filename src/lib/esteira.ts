@@ -143,7 +143,7 @@ export const OS_BALANCES: Record<Dept, { label: string; unit: string; key: strin
 };
 
 /* ===================== planilha orçamentária (PO / CP) ===================== */
-/* Rubricas e colunas vêm do modelo PROMOONE (PO_Cliente / CP_Cliente).
+/* Rubricas e colunas vêm dos modelos PO_Cliente / CP_Cliente entregues pelo cliente.
    PO = orçado, enviado ao cliente. CP = a mesma planilha fechada com o custo realizado. */
 
 export type Rubrica = 'criacao' | 'espaco' | 'cenografia' | 'tecnica' | 'operacao' | 'equipe' | 'taxas';
@@ -173,7 +173,7 @@ export type SheetLine = {
 
 /* Uma linha da planilha: custo interno de um lado, faturamento ao cliente do outro. */
 export function lineTotals(l: SheetLine, feePct: number, chargesPct: number) {
-  const cost = num(l.unit_price) * num(l.qty) * num(l.period);        // custo total PROMOONE
+  const cost = num(l.unit_price) * num(l.qty) * num(l.period);        // custo total da casa
   const markup = cost * num(l.markup);                                // mark up sobre o custo
   const clientCost = num(l.client_unit) * num(l.client_qty) * num(l.client_period);
   const fee = l.direct_pay ? clientCost * feePct : 0;                 // honorários só no pagto. direto
@@ -203,10 +203,15 @@ export function sheetSummary(lines: SheetLine[], feePct = FEE_PCT, chargesPct = 
   };
 }
 
-/* Cláusulas fixas do rodapé do modelo. */
-export const CLAUSULAS = [
-  'Os direitos autorais deste projeto pertencem à PROMOONE e serão remunerados pelos honorários que constam nesta planilha.',
-  'Prazos de pagamento (fornecedores e PROMOONE) e produção de materiais serão negociados na aprovação do projeto.',
+/* Nome da casa nos rótulos e nas cláusulas.
+   O modelo original veio de outro fornecedor (PROMOONE); aqui quem fatura é a
+   própria agência do grupo — configurável em Configurações (chave `agency_name`). */
+export const AGENCIA_PADRAO = 'Asa Mídia';
+
+/* Cláusulas do rodapé do modelo, no nome de quem assina o orçamento. */
+export const clausulas = (agencia = AGENCIA_PADRAO) => [
+  `Os direitos autorais deste projeto pertencem à ${agencia} e serão remunerados pelos honorários que constam nesta planilha.`,
+  `Prazos de pagamento (fornecedores e ${agencia}) e produção de materiais serão negociados na aprovação do projeto.`,
   'Os custos de criação e editoração incluem até 3 (três) refações. A partir da 4ª refação, se esta ocorrer por responsabilidade ou vontade do cliente, será cobrada taxa de 50% dos custos referentes à criação e/ou editoração dos lay outs refeitos.',
   'Eventuais extras serão cobrados conforme necessidade.',
   'Os valores contemplados nesse orçamento têm validade e prazo de execução de 6 meses após aprovação. Para prazos que extrapolem esse período os valores serão reajustados.',

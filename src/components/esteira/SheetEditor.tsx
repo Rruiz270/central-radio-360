@@ -4,19 +4,20 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/Toast';
 import {
-  RUBRICAS, brl, brlShort, num, lineTotals, sheetSummary, CLAUSULAS,
+  RUBRICAS, brl, brlShort, num, lineTotals, sheetSummary, clausulas, AGENCIA_PADRAO,
   type Rubrica, type SheetLine,
 } from '@/lib/esteira';
 
 export type SheetItem = SheetLine & { id: number; supplier: string | null; payment: string | null };
 
-/* Planilha orçamentária no formato PROMOONE — vale para o PO (orçado) e para o CP (realizado).
+/* Planilha orçamentária por rubricas — vale para o PO (orçado) e para o CP (realizado).
    Duas metades, como no Excel: à esquerda o custo interno, à direita o que é faturado ao cliente.
    O botão "versão cliente" esconde as colunas internas (o "EXCLUIR COLUNAS" da planilha). */
-export function SheetEditor({ poId, kind, initialItems, feePct, chargesPct, planningPct, canEdit, compareTo }: {
+export function SheetEditor({ poId, kind, initialItems, feePct, chargesPct, planningPct, canEdit, compareTo, agencia = AGENCIA_PADRAO }: {
   poId: number; kind: 'PO' | 'CP'; initialItems: SheetItem[];
   feePct: number; chargesPct: number; planningPct: number; canEdit: boolean;
   compareTo?: { label: string; total: number; cost: number } | null;
+  agencia?: string;
 }) {
   const toast = useToast();
   const router = useRouter();
@@ -61,8 +62,8 @@ export function SheetEditor({ poId, kind, initialItems, feePct, chargesPct, plan
         <table>
           <tbody>
             <tr><td>Custos faturados terceiros</td><td className="num b">{brl(S.thirdParty)}</td>
-                <td>Total faturamento PROMOONE</td><td className="num b">{brl(S.billedOwn)}</td></tr>
-            <tr><td>Custos faturados PROMOONE</td><td className="num b">{brl(S.own)}</td>
+                <td>Total faturamento {agencia}</td><td className="num b">{brl(S.billedOwn)}</td></tr>
+            <tr><td>Custos faturados {agencia}</td><td className="num b">{brl(S.own)}</td>
                 <td>Total faturamento terceiros</td><td className="num b">{brl(S.billedThirdParty)}</td></tr>
             <tr><td>Total planejamento e criação</td><td className="num b">{brl(S.planning)}</td>
                 <td>Mark up</td><td className="num b">{brl(S.markup)}</td></tr>
@@ -230,7 +231,7 @@ export function SheetEditor({ poId, kind, initialItems, feePct, chargesPct, plan
             <span className="tiny muted">entra no rodapé do PDF enviado ao cliente</span>
           </div>
           <div className="card"><div className="bd">
-            {CLAUSULAS.map((c, i) => (
+            {clausulas(agencia).map((c, i) => (
               <div className="list-li" key={i}>
                 <span className="chip c-gray" style={{ flex: 'none' }}>{i + 1}</span>
                 <div className="tiny muted" style={{ flex: 1 }}>{c}</div>
